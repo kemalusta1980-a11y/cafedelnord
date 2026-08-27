@@ -20,6 +20,7 @@ const fields = [
   ["instagram", "Instagram Linki"],
   ["facebook", "Facebook Linki"],
   ["whatsapp", "WhatsApp Numarası (örn: 905001234567 — ülke koduyla)"],
+  ["whatsapp_message", "WhatsApp Karşılama Mesajı (tıklayınca hazır gelen metin)"],
   ["hours_weekday", "Çalışma Saatleri (Hafta içi)"],
   ["hours_weekend", "Çalışma Saatleri (Hafta sonu)"],
   ["notification_email", "Rezervasyon Bildirim E-postası (yeni talepler bu adrese gönderilir)"],

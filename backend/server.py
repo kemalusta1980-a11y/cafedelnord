@@ -103,6 +103,7 @@ class Settings(BaseModel):
     reservation_enabled: bool = True
     notification_email: str = ""
     whatsapp: str = ""
+    whatsapp_message: str = "Merhaba, bilgi almak istiyorum."
 
 
 class ReservationCreate(BaseModel):

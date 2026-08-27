@@ -13,12 +13,14 @@ export const WhatsAppButton = () => {
   const { settings } = useSite();
   const location = useLocation();
   if (location.pathname.startsWith("/admin")) return null;
-  const number = (settings?.whatsapp || "").replace(/[^\d]/g, "");
+  let number = (settings?.whatsapp || "").replace(/[^\d]/g, "");
+  if (number.startsWith("0")) number = "9" + number;
   if (!number) return null;
+  const msg = settings?.whatsapp_message ? `?text=${encodeURIComponent(settings.whatsapp_message)}` : "";
 
   return (
     <motion.a
-      href={`https://wa.me/${number}`}
+      href={`https://wa.me/${number}${msg}`}
       target="_blank"
       rel="noreferrer"
       onClick={events.whatsappClick}
