@@ -1,4 +1,5 @@
-from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depends
+from fastapi import FastAPI, APIRouter, HTTPException, Request, Response, Depends, File, UploadFile
+from html import escape
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -26,6 +27,9 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 AUTH_API = "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data"
+
+from email_service import send_email  # noqa: E402
+from storage_service import init_storage, put_object, get_object, APP_NAME  # noqa: E402
 
 
 # ---------- Models ----------
@@ -79,6 +83,7 @@ class Settings(BaseModel):
     hours_weekday: str = ""
     hours_weekend: str = ""
     reservation_enabled: bool = True
+    notification_email: str = ""
 
 
 class ReservationCreate(BaseModel):
@@ -206,7 +211,9 @@ async def root():
 @api_router.get("/settings")
 async def get_settings():
     doc = await db.settings.find_one({"id": "site"}, {"_id": 0})
-    return doc or Settings().model_dump()
+    merged = {**Settings().model_dump(), **(doc or {})}
+    merged.pop("notification_email", None)
+    return merged
 
 
 @api_router.get("/menu")
@@ -229,11 +236,37 @@ async def get_campaigns():
     return await db.campaigns.find({"active": True}, {"_id": 0}).sort("created_at", -1).to_list(20)
 
 
+async def notify_reservation(res: "Reservation"):
+    settings = await db.settings.find_one({"id": "site"}, {"_id": 0}) or {}
+    to = (settings.get("notification_email") or "").strip()
+    if not to:
+        return
+    subject = "Yeni Rezervasyon Talebi — Cafe Del Nord"
+    html = (
+        '<table role="presentation" width="100%"><tr><td style="padding:24px;font-family:Arial,sans-serif;color:#222">'
+        '<h2 style="margin:0 0 16px">Yeni rezervasyon talebi</h2>'
+        f'<p style="margin:4px 0"><strong>Ad Soyad:</strong> {escape(res.name)}</p>'
+        f'<p style="margin:4px 0"><strong>Telefon:</strong> {escape(res.phone)}</p>'
+        f'<p style="margin:4px 0"><strong>Tarih / Saat:</strong> {escape(res.date)} {escape(res.time)}</p>'
+        f'<p style="margin:4px 0"><strong>Kişi Sayısı:</strong> {res.guests}</p>'
+        f'<p style="margin:4px 0"><strong>Not:</strong> {escape(res.note) or "-"}</p>'
+        '<p style="margin:16px 0 0">Yönetim panelindeki Rezervasyonlar sekmesinden onaylayabilirsiniz.</p>'
+        '<p style="font-size:12px;color:#888;margin-top:20px">Bu e-posta Cafe Del Nord web sitesi tarafından gönderilmiştir.</p>'
+        "</td></tr></table>"
+    )
+    try:
+        await send_email(to=to, subject=subject, html=html)
+        logger.info(f"Reservation notification sent to {to}")
+    except Exception as e:
+        logger.error(f"Reservation email failed: {e}")
+
+
 @api_router.post("/reservations")
 async def create_reservation(body: ReservationCreate, request: Request):
     rate_limit(request, "reservation", limit=5, window=300)
     res = Reservation(**body.model_dump())
     await db.reservations.insert_one(res.model_dump())
+    await notify_reservation(res)
     return {"ok": True, "id": res.id}
 
 
@@ -317,6 +350,12 @@ async def delete_item(item_id: str, user=Depends(require_admin)):
     return {"ok": True}
 
 
+@api_router.get("/admin/settings")
+async def admin_settings_get(user=Depends(require_admin)):
+    doc = await db.settings.find_one({"id": "site"}, {"_id": 0})
+    return {**Settings().model_dump(), **(doc or {})}
+
+
 @api_router.put("/admin/settings")
 async def update_settings(body: dict, user=Depends(require_admin)):
     allowed_keys = set(Settings.model_fields.keys()) - {"id"}
@@ -335,6 +374,49 @@ async def update_reservation(res_id: str, body: dict, user=Depends(require_admin
     if "status" in body and body["status"] in {"new", "confirmed", "cancelled"}:
         await db.reservations.update_one({"id": res_id}, {"$set": {"status": body["status"]}})
     return {"ok": True}
+
+
+ALLOWED_IMAGE_TYPES = {"image/jpeg": "jpg", "image/png": "png", "image/webp": "webp", "image/gif": "gif"}
+MAX_UPLOAD_SIZE = 5 * 1024 * 1024
+
+
+@api_router.post("/admin/upload")
+async def upload_image(file: UploadFile = File(...), user=Depends(require_admin)):
+    ext = ALLOWED_IMAGE_TYPES.get(file.content_type)
+    if not ext:
+        raise HTTPException(status_code=400, detail="Sadece JPG, PNG, WEBP veya GIF yükleyebilirsiniz.")
+    data = await file.read()
+    if len(data) > MAX_UPLOAD_SIZE:
+        raise HTTPException(status_code=400, detail="Dosya 5MB'dan büyük olamaz.")
+    path = f"{APP_NAME}/uploads/{uuid.uuid4()}.{ext}"
+    try:
+        result = await put_object(path, data, file.content_type)
+    except Exception as e:
+        logger.error(f"Upload failed: {e}")
+        raise HTTPException(status_code=502, detail="Dosya yüklenemedi, lütfen tekrar deneyin.")
+    await db.files.insert_one({
+        "id": str(uuid.uuid4()),
+        "storage_path": result["path"],
+        "original_filename": file.filename,
+        "content_type": file.content_type,
+        "size": result.get("size", len(data)),
+        "is_deleted": False,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
+    return {"url": f"/api/files/{result['path']}"}
+
+
+@api_router.get("/files/{path:path}")
+async def serve_file(path: str):
+    record = await db.files.find_one({"storage_path": path, "is_deleted": False}, {"_id": 0})
+    if not record:
+        raise HTTPException(status_code=404, detail="File not found")
+    try:
+        data, content_type = await get_object(path)
+    except Exception:
+        raise HTTPException(status_code=404, detail="File not found")
+    return Response(content=data, media_type=record.get("content_type", content_type),
+                    headers={"Cache-Control": "public, max-age=86400"})
 
 
 class CampaignIn(BaseModel):
@@ -459,6 +541,11 @@ app.add_middleware(
 @app.on_event("startup")
 async def on_startup():
     await seed()
+    try:
+        await init_storage()
+        logger.info("Storage initialized")
+    except Exception as e:
+        logger.error(f"Storage init failed: {e}")
 
 
 @app.on_event("shutdown")

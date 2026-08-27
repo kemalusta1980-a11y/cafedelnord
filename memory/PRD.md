@@ -24,6 +24,7 @@ www.cafedelnord.com.tr'nin içeriğini (menü, görseller, telefon, slogan) koru
 
 ## Yapılanlar (2026-06)
 - MVP tamamlandı, testing agent: backend 15/15, frontend tüm kritik akışlar PASS (iteration_1.json)
+- İterasyon 2: Admin görsel dosya yükleme (Emergent object storage, POST /api/admin/upload → /api/files/{path}), rezervasyon e-posta bildirimi (Emergent managed Resend, alıcı: settings.notification_email — admin Ayarlar sekmesinden ayarlanır, boşsa gönderilmez), GET /api/admin/settings (notification_email public settings'ten gizlendi). Testler: 12/12 + regresyon PASS (iteration_2.json)
 
 ## Backlog / Sonraki Adımlar
 - P1: Ürün görseli dosya yükleme (şu an URL ile), admin'e GA4 Measurement ID alanı

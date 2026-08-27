@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
-import { Plus, Pencil, Trash2, Eye, EyeOff, Star } from "lucide-react";
+import { Plus, Pencil, Trash2, Eye, EyeOff, Star, Upload } from "lucide-react";
 import { api } from "../../lib/api";
 
 const empty = { category_id: "", name: "", name_en: "", description: "", description_en: "", price: "", image: "", order: 0, visible: true, featured: false };
@@ -9,9 +9,29 @@ const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 
 export const AdminItems = () => {
   const [menu, setMenu] = useState([]);
   const [editing, setEditing] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileRef = useRef(null);
 
   const load = () => api.get("/admin/menu").then((r) => setMenu(r.data)).catch(() => toast.error("Menü yüklenemedi"));
   useEffect(() => { load(); }, []);
+
+  const uploadFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const fd = new FormData();
+    fd.append("file", file);
+    setUploading(true);
+    try {
+      const r = await api.post("/admin/upload", fd, { headers: { "Content-Type": "multipart/form-data" } });
+      setEditing((prev) => ({ ...prev, image: r.data.url }));
+      toast.success("Görsel yüklendi");
+    } catch (err) {
+      toast.error(err.response?.data?.detail || "Görsel yüklenemedi");
+    } finally {
+      setUploading(false);
+      if (fileRef.current) fileRef.current.value = "";
+    }
+  };
 
   const save = async () => {
     const payload = { ...editing, price: editing.price === "" || editing.price === null ? null : Number(editing.price), order: Number(editing.order) };
@@ -79,8 +99,15 @@ export const AdminItems = () => {
               <textarea value={editing.description_en || ""} onChange={set("description_en")} rows={2} className={inputCls} data-testid="item-desc-en-input" />
             </div>
             <div>
-              <label className="text-xs text-white/50 block mb-1">Görsel URL (örn: /images/kumpir.jpg)</label>
-              <input value={editing.image || ""} onChange={set("image")} className={inputCls} data-testid="item-image-input" />
+              <label className="text-xs text-white/50 block mb-1">Ürün Görseli</label>
+              <div className="flex gap-2 items-center">
+                <input value={editing.image || ""} onChange={set("image")} placeholder="/images/kumpir.jpg veya yükleyin →" className={inputCls} data-testid="item-image-input" />
+                <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={uploadFile} className="hidden" data-testid="item-image-file-input" />
+                <button type="button" onClick={() => fileRef.current?.click()} disabled={uploading} className="btn-pill btn-ghost !py-2 !px-3 !text-xs shrink-0 disabled:opacity-50" data-testid="item-image-upload-btn">
+                  <Upload size={13} /> {uploading ? "..." : "Yükle"}
+                </button>
+              </div>
+              {editing.image && <img src={editing.image} alt="Önizleme" className="mt-2 w-20 h-20 rounded-lg object-cover border border-white/10" data-testid="item-image-preview" />}
             </div>
             <div>
               <label className="text-xs text-white/50 block mb-1">Sıra</label>

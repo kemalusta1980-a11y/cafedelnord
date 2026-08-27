@@ -1,0 +1,26 @@
+{
+  "summary": "Iteration-2 targeted testing of 3 new features (admin image upload via Emergent object storage, reservation email notification via Emergent-managed Resend, notification_email setting in Ayarlar) + light regression. Backend: 12/12 new pytest cases pass in /app/backend/tests/test_uploads_and_notify.py (upload auth gating 401/403, non-image 400, valid JPG upload -> /api/files/cafedelnord/uploads/<uuid>.jpg, public GET serves image with correct content-type, 404 for unknown path, uploaded URL persisted on menu item and returned by GET /api/menu, notification_email round-trip via PUT/GET settings, reservation POST triggers backend log 'Reservation notification sent to delivered@resend.dev', reservation without notification_email still returns 200). Frontend admin (session cookie, admin role): Ayarlar tab shows settings-notification_email-input, saving persists across reload; Ürünler tab edit form shows item-image-upload-btn + hidden item-image-file-input, uploading kumpir.jpg sets item-image-input to /api/files/cafedelnord/uploads/<uuid>.jpg and renders item-image-preview. Public / and /menu still load 200. All uploads happen through the real Emergent object storage.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": [
+    "/app/backend/tests/test_uploads_and_notify.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/iter2_uploads.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py upload_image correctly validates content_type against a whitelist AND enforces 5MB size cap after read (memory bound but acceptable for 5MB limit).",
+    "serve_file resolves the DB record by storage_path so soft-deleted files return 404 (good). content-type is taken from DB record with storage as fallback — correct.",
+    "notify_reservation is awaited AFTER inserting the reservation and wraps send_email in try/except so email failure cannot fail reservation creation (verified).",
+    "notification_email is exposed publicly through GET /api/settings — this is by design (Settings model default '' returned), but PII-wise it is an email address that will be visible to any anonymous visitor. Consider moving notification_email to admin-only settings or masking it in the public endpoint.",
+    "Frontend AdminItems.uploadFile uses FormData with explicit 'Content-Type: multipart/form-data' header — axios normally lets the browser set the boundary; forcing this header can break in some axios versions. It works here because axios lets the browser rewrite the header when the value is FormData, but it is safer to omit the header entirely."
+  ],
+  "updated_files": ["/app/backend/tests/test_uploads_and_notify.py"],
+  "success_rate": {"backend": "100% (12/12 new + 15/15 prior)", "frontend": "100% of critical new flows"},
+  "test_credentials": "MongoDB seeded sessions still valid: admin=test_session_admin_1787840617697, viewer=test_session_viewer_1787840617697 (both expire 2026-09-03).",
+  "seed_data_creation": "Reused sessions from iter 1. Created 1 uploaded file record (soft-delete only, remains) and 2 TEST_ reservations which have been cleaned up.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "notification_email has been reset to empty string as required. Uploaded test files are still in DB (files collection) and in Emergent object storage — cleanup instructions say soft-delete only, so left as-is. Rate limit on /api/reservations is 5 per 5-min per IP; be careful when re-running email tests back-to-back. Uploaded images are served through GET /api/files/{path:path} — always assert URL starts with /api/files/cafedelnord/uploads/. AdminItems form file input testid = item-image-file-input (hidden), trigger button = item-image-upload-btn.",
+  "rca of the issue": "N/A — no bugs found."
+}

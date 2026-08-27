@@ -21,6 +21,7 @@ const fields = [
   ["facebook", "Facebook Linki"],
   ["hours_weekday", "Çalışma Saatleri (Hafta içi)"],
   ["hours_weekend", "Çalışma Saatleri (Hafta sonu)"],
+  ["notification_email", "Rezervasyon Bildirim E-postası (yeni talepler bu adrese gönderilir)"],
 ];
 
 export const AdminSettings = () => {
@@ -29,7 +30,7 @@ export const AdminSettings = () => {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    api.get("/settings").then((r) => setForm(r.data)).catch(() => {});
+    api.get("/admin/settings").then((r) => setForm(r.data)).catch(() => {});
   }, []);
 
   if (!form) return <p className="text-white/40">Yükleniyor...</p>;
