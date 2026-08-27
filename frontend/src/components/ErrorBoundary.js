@@ -9,6 +9,8 @@ export class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     console.error("App render error:", error, info);
+    const stackLine = (error?.stack || "").split("\n").slice(0, 2).join(" ");
+    this.setState({ message: `${error?.message || error} ${stackLine ? "| " + stackLine.slice(0, 200) : ""}` });
   }
 
   render() {

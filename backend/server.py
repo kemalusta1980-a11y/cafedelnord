@@ -278,6 +278,9 @@ async def notify_reservation(res: "Reservation"):
 
 @api_router.post("/reservations")
 async def create_reservation(body: ReservationCreate, request: Request):
+    settings = await db.settings.find_one({"id": "site"}, {"_id": 0}) or {}
+    if not settings.get("reservation_enabled", True):
+        raise HTTPException(status_code=403, detail="Rezervasyon şu anda kapalıdır.")
     rate_limit(request, "reservation", limit=5, window=300)
     res = Reservation(**body.model_dump())
     await db.reservations.insert_one(res.model_dump())

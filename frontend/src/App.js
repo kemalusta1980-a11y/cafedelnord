@@ -22,7 +22,9 @@ import AuthCallback from "@/pages/AuthCallback";
 
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-  useEffect(() => window.scrollTo(0, 0), [pathname]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return null;
 };
 
@@ -73,7 +75,11 @@ function App() {
     }
     return () => {
       if (rafId) cancelAnimationFrame(rafId);
-      if (lenis) lenis.destroy();
+      try {
+        if (lenis && typeof lenis.destroy === "function") lenis.destroy();
+      } catch (e) {
+        console.warn("Lenis cleanup:", e);
+      }
     };
   }, []);
 

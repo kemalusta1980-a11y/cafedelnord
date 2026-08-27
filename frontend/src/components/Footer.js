@@ -40,7 +40,7 @@ export const Footer = () => {
         <div>
           <p className="eyebrow mb-5">{t("menu")}</p>
           <ul className="space-y-3 text-sm">
-            {[["/", t("home")], ["/menu", t("menu")], ["/hakkimizda", t("about")], ["/galeri", t("gallery")], ["/iletisim", t("contact")], ["/rezervasyon", t("reservation")]].map(([to, label]) => (
+            {[["/", t("home")], ["/menu", t("menu")], ["/hakkimizda", t("about")], ["/galeri", t("gallery")], ["/iletisim", t("contact")], ...(s.reservation_enabled ? [["/rezervasyon", t("reservation")]] : [])].map(([to, label]) => (
               <li key={to}>
                 <Link to={to} className="text-white/50 hover:text-gold transition-colors" data-testid={`footer-link-${to.replace("/", "") || "home"}`}>{label}</Link>
               </li>

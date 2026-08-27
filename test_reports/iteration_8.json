@@ -1,0 +1,26 @@
+{
+  "summary": "Iteration 8: Verified useEffect concise-body-return fix for CAFE DEL NORD. With window.scrollTo patched to return a truthy object via page.add_init_script, tested /, /menu, /galeri, /hakkimizda, /iletisim (13/13 scenarios) + 5 SPA nav transitions + 3 consecutive home reloads: NO error-boundary rendered, ZERO pageerrors, ZERO 'destroy is not a function' errors. Combination scenario (scrollTo patched + IntersectionObserver deleted + ResizeObserver deleted + localStorage blocked) still renders home hero cleanly. Regression: reservation button hidden in nav (expected), /rezervasyon redirects to /iletisim (expected), menu search works, gallery renders 16 items, no webpack overlay. Backend sanity: POST /api/reservations with valid payload returns 403 'Rezervasyon şu anda kapalıdır.' (expected).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "App.js ScrollToTop now uses braced body — effect implicitly returns undefined, immune to third-party window.scrollTo patches that return objects.",
+    "App.js Lenis cleanup wrapped in try/catch with typeof-function guard on lenis.destroy — resilient to partially-initialized instances.",
+    "Navbar.js setOpen(false) effect now braced — same immunity as ScrollToTop.",
+    "ErrorBoundary now surfaces message + first stack line via data-testid=error-detail — greatly improves future diagnosability.",
+    "Grepped src/ for other concise-body useEffect returns; only App.js/Navbar.js were affected and both are fixed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (sanity)", "frontend": "100%"},
+  "test_credentials": "N/A - public pages",
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "useEffect concise-body-return bug fixed. window.scrollTo now safely returns an object via preview instrumentation without breaking React cleanup. Rate limit /api/reservations = 5/5min per IP. Reservation feature is disabled server-side (reservation_enabled=false); expect 403 on POST and UI absence of reservation CTAs — not a bug.",
+  "rca of the issue": "React invokes the return value of a useEffect callback as its cleanup function. When a useEffect uses a concise arrow body like `useEffect(() => window.scrollTo(0,0), [pathname])`, whatever window.scrollTo returns becomes the cleanup. Preview panel instrumentation patched window.scrollTo to return a truthy object; on the next route change (or StrictMode double-invoke) React tried to call that object as a function → 'destroy is not a function' → ErrorBoundary. Fix: convert both concise-body effects (ScrollToTop in App.js, setOpen effect in Navbar.js) to braced bodies so they implicitly return undefined. Additionally, Lenis destroy is guarded with try/catch + typeof-function check. Verified reproduction with add_init_script patching scrollTo — post-fix: zero boundaries across 13 test scenarios."
+}

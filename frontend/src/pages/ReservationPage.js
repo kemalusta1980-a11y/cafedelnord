@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Navigate } from "react-router-dom";
 import { CalendarCheck, Phone } from "lucide-react";
 import { toast } from "sonner";
 import { api } from "../lib/api";
@@ -16,6 +17,10 @@ export default function ReservationPage() {
   const [done, setDone] = useState(false);
 
   const set = (k) => (e) => setForm({ ...form, [k]: e.target.value });
+
+  if (settings && !settings.reservation_enabled) {
+    return <Navigate to="/iletisim" replace />;
+  }
 
   const submit = async (e) => {
     e.preventDefault();
