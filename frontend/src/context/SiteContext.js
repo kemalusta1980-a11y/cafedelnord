@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { api } from "../lib/api";
+import { safeStorage } from "../lib/storage";
 
 const SiteContext = createContext(null);
 
@@ -20,7 +21,7 @@ const UI = {
 
 export const SiteProvider = ({ children }) => {
   const [settings, setSettings] = useState(null);
-  const [lang, setLang] = useState(() => localStorage.getItem("cdn_lang") || "tr");
+  const [lang, setLang] = useState(() => safeStorage.get("cdn_lang") || "tr");
 
   useEffect(() => {
     api.get("/settings").then((r) => setSettings(r.data)).catch(() => {});
@@ -29,7 +30,7 @@ export const SiteProvider = ({ children }) => {
   const toggleLang = () => {
     const next = lang === "tr" ? "en" : "tr";
     setLang(next);
-    localStorage.setItem("cdn_lang", next);
+    safeStorage.set("cdn_lang", next);
   };
 
   const t = (key) => UI[lang][key] || key;

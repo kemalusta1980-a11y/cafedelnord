@@ -2,12 +2,13 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie } from "lucide-react";
 import { Link } from "react-router-dom";
+import { safeStorage } from "../lib/storage";
 
 export const CookieConsent = () => {
-  const [visible, setVisible] = useState(() => !localStorage.getItem("cdn_cookie_consent"));
+  const [visible, setVisible] = useState(() => !safeStorage.get("cdn_cookie_consent"));
 
   const decide = (value) => {
-    localStorage.setItem("cdn_cookie_consent", value);
+    safeStorage.set("cdn_cookie_consent", value);
     setVisible(false);
   };
 
