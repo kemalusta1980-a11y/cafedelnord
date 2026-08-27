@@ -13,4 +13,5 @@ export const events = {
   menuView: (category) => trackEvent("menu_view", { category }),
   reservationClick: () => trackEvent("reservation_click"),
   instagramClick: () => trackEvent("instagram_click"),
+  whatsappClick: () => trackEvent("whatsapp_click"),
 };

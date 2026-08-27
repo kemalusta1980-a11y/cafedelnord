@@ -65,6 +65,15 @@ class Campaign(BaseModel):
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
 
+class GalleryPhoto(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    image: str
+    alt: str = ""
+    tall: bool = False
+    order: int = 0
+    visible: bool = True
+
+
 class Settings(BaseModel):
     id: str = "site"
     site_name: str = "Cafe Del Nord"
@@ -84,6 +93,7 @@ class Settings(BaseModel):
     hours_weekend: str = ""
     reservation_enabled: bool = True
     notification_email: str = ""
+    whatsapp: str = ""
 
 
 class ReservationCreate(BaseModel):
@@ -234,6 +244,11 @@ async def get_featured():
 @api_router.get("/campaigns")
 async def get_campaigns():
     return await db.campaigns.find({"active": True}, {"_id": 0}).sort("created_at", -1).to_list(20)
+
+
+@api_router.get("/gallery")
+async def get_gallery():
+    return await db.gallery.find({"visible": True}, {"_id": 0}).sort("order", 1).to_list(200)
 
 
 async def notify_reservation(res: "Reservation"):
@@ -419,6 +434,41 @@ async def serve_file(path: str):
                     headers={"Cache-Control": "public, max-age=86400"})
 
 
+class GalleryIn(BaseModel):
+    image: str
+    alt: str = ""
+    tall: bool = False
+    order: int = 0
+    visible: bool = True
+
+
+@api_router.get("/admin/gallery")
+async def admin_gallery(user=Depends(require_admin)):
+    return await db.gallery.find({}, {"_id": 0}).sort("order", 1).to_list(200)
+
+
+@api_router.post("/admin/gallery")
+async def create_gallery_photo(body: GalleryIn, user=Depends(require_admin)):
+    photo = GalleryPhoto(**body.model_dump())
+    await db.gallery.insert_one(photo.model_dump())
+    return photo
+
+
+@api_router.put("/admin/gallery/{photo_id}")
+async def update_gallery_photo(photo_id: str, body: dict, user=Depends(require_admin)):
+    allowed = {k: v for k, v in body.items() if k in {"image", "alt", "tall", "order", "visible"}}
+    r = await db.gallery.update_one({"id": photo_id}, {"$set": allowed})
+    if r.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Fotoğraf bulunamadı")
+    return {"ok": True}
+
+
+@api_router.delete("/admin/gallery/{photo_id}")
+async def delete_gallery_photo(photo_id: str, user=Depends(require_admin)):
+    await db.gallery.delete_one({"id": photo_id})
+    return {"ok": True}
+
+
 class CampaignIn(BaseModel):
     title: str
     description: str = ""
@@ -504,6 +554,26 @@ SEED_ITEMS = {
 }
 
 
+SEED_GALLERY = [
+    ("/images/kumpir.jpg", "Taş fırında kumpir", False),
+    ("/images/kahve-atmosfer.jpg", "Kahve atmosferi", True),
+    ("/images/et-burger.jpg", "Et burger", False),
+    ("/images/kunefe.jpg", "Künefe", False),
+    ("/images/serpme.jpg", "Serpme kahvaltı", True),
+    ("/images/waffle.jpg", "Waffle", False),
+    ("/images/pizza.jpg", "Pizza çeşitleri", False),
+    ("/images/tatli-atmosfer.jpg", "Tatlılar", True),
+    ("/images/latte.jpg", "Latte", False),
+    ("/images/karisik-izgara.jpg", "Karışık ızgara", False),
+    ("/images/milkshake.jpg", "Milkshake", False),
+    ("/images/turk-kahvesi.jpg", "Türk kahvesi", True),
+    ("/images/icecek-atmosfer.jpg", "Soğuk içecekler", False),
+    ("/images/katmer.jpg", "Katmer", False),
+    ("/images/burger-atmosfer.jpg", "Burger çeşitleri", False),
+    ("/images/sufle.jpg", "Sufle", False),
+]
+
+
 async def seed():
     if await db.categories.count_documents({}) == 0:
         for c in SEED_CATEGORIES:
@@ -525,6 +595,11 @@ async def seed():
         )
         await db.settings.insert_one(s.model_dump())
         logger.info("Settings seeded")
+    if await db.gallery.count_documents({}) == 0:
+        for i, (img, alt, tall) in enumerate(SEED_GALLERY):
+            photo = GalleryPhoto(image=img, alt=alt, tall=tall, order=i)
+            await db.gallery.insert_one(photo.model_dump())
+        logger.info("Gallery seeded")
 
 
 app.include_router(api_router)

@@ -1,0 +1,30 @@
+{
+  "summary": "Iteration 4: verified gallery MongoDB CRUD + WhatsApp floating button features. Backend: 7/7 new pytest cases passed (public GET /api/gallery returns 16 sorted visible photos with no _id; admin CRUD create/update/delete with proper auth; 401 no-token; 403 viewer; 404 on unknown id; whatsapp field in Settings model and persists via PUT /api/admin/settings). Frontend: /galeri masonry renders 16 photos, lightbox open/next/prev/close works. WhatsApp button correctly hidden when settings.whatsapp='', appears with correct href=https://wa.me/905001234567 and target=_blank on public pages (/, /menu, /rezervasyon), NOT rendered on /admin. Admin flow with session cookie: Galeri tab shows 16 cards; uploading /app/frontend/public/images/latte.jpg via gallery-upload-btn creates a 17th card AND appears on public /galeri (17); toggling gallery-toggle-{id} hides it from public GET (back to 16 public, still 17 admin); gallery-delete-{id} with confirm dialog removes it (back to 16 admin). Ayarlar tab: settings-whatsapp-input persists the saved value. No webpack-dev-server overlay observed. No pageerrors. Cleanup performed: whatsapp reset to '', uploaded test photo deleted, gallery back to 16.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/rezervasyon", "issues": ["Reservation form uses browser-native date (mm/dd/yyyy) and time (--:--) inputs instead of a locale-aware/shadcn date picker — Turkish site users would expect dd/mm/yyyy or a custom picker. Pre-existing, not introduced by this iteration."]}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_gallery_whatsapp.py",
+    "/app/backend/tests/backend_test.py",
+    "/app/test_reports/pytest/iter4_gallery.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "GalleryPhoto model + endpoints are clean (_id excluded, sorted by order, visible filter on public). CRUD auth via require_admin properly returns 401/403.",
+    "WhatsAppButton correctly strips non-digits from settings.whatsapp before building wa.me URL and hides itself on /admin routes and when the value is empty.",
+    "AdminGallery upload flow chains /admin/upload -> /admin/gallery cleanly; alt defaults to filename sans extension, order auto-set to photos.length — reasonable.",
+    "Minor: PUT /api/admin/gallery/{id} returns {ok:true} instead of the updated document; UI reloads via full GET which is fine, but returning the updated object would save a round trip."
+  ],
+  "updated_files": ["/app/backend/tests/test_gallery_whatsapp.py"],
+  "success_rate": {"backend": "100% (7/7 new + previous suite unaffected)", "frontend": "100% (all listed flows verified)"},
+  "test_credentials": "Admin bearer/session_token: test_session_admin_1787840617697; Viewer: test_session_viewer_1787840617697 (already seeded in MongoDB test_database).",
+  "seed_data_creation": "None (used pre-existing seeded gallery + admin/viewer sessions). Created & deleted one TEST photo (latte.jpg upload). Whatsapp temporarily set to 905001234567 then reset to ''.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All iteration-4 features (gallery MongoDB CRUD + WhatsApp floating button) verified end-to-end. Backend regression suite is at /app/backend/tests/ — run `pytest /app/backend/tests/ -v`. Sessions still valid in DB. WhatsApp is currently '' (cleaned up). If retesting the button, PUT /api/admin/settings {whatsapp: '905001234567'} then reload the page (SiteContext only fetches settings on mount)."
+}

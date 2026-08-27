@@ -25,7 +25,8 @@ www.cafedelnord.com.tr'nin içeriğini (menü, görseller, telefon, slogan) koru
 ## Yapılanlar (2026-06)
 - MVP tamamlandı, testing agent: backend 15/15, frontend tüm kritik akışlar PASS (iteration_1.json)
 - İterasyon 2: Admin görsel dosya yükleme (Emergent object storage, POST /api/admin/upload → /api/files/{path}), rezervasyon e-posta bildirimi (Emergent managed Resend, alıcı: settings.notification_email), GET /api/admin/settings (notification_email public settings'ten gizlendi). Testler: 12/12 + regresyon PASS (iteration_2.json)
-- İterasyon 3 (bug fix): Önizlemede görülen "Uncaught runtime errors" CRA overlay hatası giderildi — zararsız ResizeObserver loop hataları craco devServer overlay filtresi + index.js global error listener ile bastırıldı. Testing agent: tüm sayfalar + resize/scroll stres testleri PASS, hiçbir overlay/hata yok (iteration_3.json)
+- İterasyon 3 (bug fix): Önizlemede görülen "Uncaught runtime errors" CRA overlay hatası giderildi
+- İterasyon 4: Galeri yönetimi (gallery koleksiyonu, GET /api/gallery + admin CRUD, admin panelde Galeri sekmesi: yükle/alt text/sıra/dikey/gizle/sil) ve WhatsApp yüzen butonu (settings.whatsapp, wa.me linki, boşsa gizli). Testler: 7/7 + tüm akışlar PASS (iteration_4.json) — zararsız ResizeObserver loop hataları craco devServer overlay filtresi + index.js global error listener ile bastırıldı. Testing agent: tüm sayfalar + resize/scroll stres testleri PASS, hiçbir overlay/hata yok (iteration_3.json)
 
 ## Backlog / Sonraki Adımlar
 - P1: Ürün görseli dosya yükleme (şu an URL ile), admin'e GA4 Measurement ID alanı

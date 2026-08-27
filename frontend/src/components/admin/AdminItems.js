@@ -22,7 +22,7 @@ export const AdminItems = () => {
     fd.append("file", file);
     setUploading(true);
     try {
-      const r = await api.post("/admin/upload", fd, { headers: { "Content-Type": "multipart/form-data" } });
+      const r = await api.post("/admin/upload", fd);
       setEditing((prev) => ({ ...prev, image: r.data.url }));
       toast.success("Görsel yüklendi");
     } catch (err) {

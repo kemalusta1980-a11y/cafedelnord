@@ -1,29 +1,16 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import { api } from "../lib/api";
 import { Reveal } from "../components/Reveal";
 
-const photos = [
-  { src: "/images/kumpir.jpg", alt: "Taş fırında kumpir" },
-  { src: "/images/kahve-atmosfer.jpg", alt: "Kahve atmosferi", tall: true },
-  { src: "/images/et-burger.jpg", alt: "Et burger" },
-  { src: "/images/kunefe.jpg", alt: "Künefe" },
-  { src: "/images/serpme.jpg", alt: "Serpme kahvaltı", tall: true },
-  { src: "/images/waffle.jpg", alt: "Waffle" },
-  { src: "/images/pizza.jpg", alt: "Pizza çeşitleri" },
-  { src: "/images/tatli-atmosfer.jpg", alt: "Tatlılar", tall: true },
-  { src: "/images/latte.jpg", alt: "Latte" },
-  { src: "/images/karisik-izgara.jpg", alt: "Karışık ızgara" },
-  { src: "/images/milkshake.jpg", alt: "Milkshake" },
-  { src: "/images/turk-kahvesi.jpg", alt: "Türk kahvesi", tall: true },
-  { src: "/images/icecek-atmosfer.jpg", alt: "Soğuk içecekler" },
-  { src: "/images/katmer.jpg", alt: "Katmer" },
-  { src: "/images/burger-atmosfer.jpg", alt: "Burger çeşitleri" },
-  { src: "/images/sufle.jpg", alt: "Sufle" },
-];
-
 export default function GalleryPage() {
+  const [photos, setPhotos] = useState([]);
   const [index, setIndex] = useState(null);
+
+  useEffect(() => {
+    api.get("/gallery").then((r) => setPhotos(r.data)).catch(() => {});
+  }, []);
 
   const next = (dir) => setIndex((i) => (i + dir + photos.length) % photos.length);
 
@@ -39,9 +26,9 @@ export default function GalleryPage() {
 
         <div className="columns-2 md:columns-3 lg:columns-4 gap-4 [column-fill:balance]">
           {photos.map((p, i) => (
-            <Reveal key={p.src} delay={(i % 4) * 0.06} className="mb-4 break-inside-avoid">
+            <Reveal key={p.id} delay={(i % 4) * 0.06} className="mb-4 break-inside-avoid">
               <button onClick={() => setIndex(i)} className="img-frame block w-full" data-testid={`gallery-photo-${i}`}>
-                <img src={p.src} alt={p.alt} loading="lazy" className={p.tall ? "aspect-[3/4]" : "aspect-[4/3]"} />
+                <img src={p.image} alt={p.alt} loading="lazy" className={p.tall ? "aspect-[3/4]" : "aspect-[4/3]"} />
               </button>
             </Reveal>
           ))}
@@ -49,7 +36,7 @@ export default function GalleryPage() {
       </div>
 
       <AnimatePresence>
-        {index !== null && (
+        {index !== null && photos[index] && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -73,7 +60,7 @@ export default function GalleryPage() {
               initial={{ opacity: 0, scale: 0.96 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.35 }}
-              src={photos[index].src}
+              src={photos[index].image}
               alt={photos[index].alt}
               className="max-h-[85vh] max-w-[88vw] rounded-xl object-contain"
               onClick={(e) => e.stopPropagation()}

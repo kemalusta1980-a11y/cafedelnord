@@ -8,6 +8,7 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { StickyBar } from "@/components/StickyBar";
 import { CookieConsent } from "@/components/CookieConsent";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
 import Home from "@/pages/Home";
 import MenuPage from "@/pages/MenuPage";
 import AboutPage from "@/pages/AboutPage";
@@ -50,6 +51,7 @@ function AppRouter() {
       </Routes>
       {!isAdmin && <Footer />}
       {!isAdmin && <StickyBar />}
+      {!isAdmin && <WhatsAppButton />}
       {!isAdmin && <CookieConsent />}
     </>
   );

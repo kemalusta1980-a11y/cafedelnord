@@ -6,6 +6,7 @@ import { AdminItems } from "../components/admin/AdminItems";
 import { AdminCategories } from "../components/admin/AdminCategories";
 import { AdminReservations } from "../components/admin/AdminReservations";
 import { AdminCampaigns } from "../components/admin/AdminCampaigns";
+import { AdminGallery } from "../components/admin/AdminGallery";
 import { AdminSettings } from "../components/admin/AdminSettings";
 
 // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
@@ -13,6 +14,7 @@ const tabs = [
   { id: "items", label: "Ürünler" },
   { id: "categories", label: "Kategoriler" },
   { id: "reservations", label: "Rezervasyonlar" },
+  { id: "gallery", label: "Galeri" },
   { id: "campaigns", label: "Kampanyalar" },
   { id: "settings", label: "Ayarlar" },
 ];
@@ -109,6 +111,7 @@ export default function AdminPage() {
       {tab === "items" && <AdminItems />}
       {tab === "categories" && <AdminCategories />}
       {tab === "reservations" && <AdminReservations />}
+      {tab === "gallery" && <AdminGallery />}
       {tab === "campaigns" && <AdminCampaigns />}
       {tab === "settings" && <AdminSettings />}
     </div>
