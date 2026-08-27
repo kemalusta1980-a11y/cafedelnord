@@ -60,16 +60,20 @@ function AppRouter() {
 
 function App() {
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.1, smoothWheel: true });
-    let rafId;
-    const raf = (time) => {
-      lenis.raf(time);
+    let lenis, rafId;
+    try {
+      lenis = new Lenis({ duration: 1.1, smoothWheel: true });
+      const raf = (time) => {
+        lenis.raf(time);
+        rafId = requestAnimationFrame(raf);
+      };
       rafId = requestAnimationFrame(raf);
-    };
-    rafId = requestAnimationFrame(raf);
+    } catch (e) {
+      console.warn("Smooth scroll unavailable:", e);
+    }
     return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
+      if (rafId) cancelAnimationFrame(rafId);
+      if (lenis) lenis.destroy();
     };
   }, []);
 

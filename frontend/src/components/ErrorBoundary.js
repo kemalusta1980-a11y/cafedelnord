@@ -1,10 +1,10 @@
 import { Component } from "react";
 
 export class ErrorBoundary extends Component {
-  state = { hasError: false };
+  state = { hasError: false, message: "" };
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
+  static getDerivedStateFromError(error) {
+    return { hasError: true, message: error?.message || String(error) };
   }
 
   componentDidCatch(error, info) {
@@ -22,6 +22,9 @@ export class ErrorBoundary extends Component {
           <button onClick={() => window.location.reload()} className="btn-pill btn-solid" data-testid="error-reload-btn">
             Sayfayı Yenile
           </button>
+          {this.state.message && (
+            <p className="text-white/25 text-xs max-w-md break-words" data-testid="error-detail">{this.state.message}</p>
+          )}
         </div>
       );
     }
