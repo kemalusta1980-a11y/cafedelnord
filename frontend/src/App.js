@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Lenis from "@studio-freight/lenis";
 import { Toaster } from "sonner";
 import { SiteProvider } from "@/context/SiteContext";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { StickyBar } from "@/components/StickyBar";
@@ -74,12 +75,14 @@ function App() {
 
   return (
     <div className="grain min-h-screen bg-[#030303] text-white">
-      <BrowserRouter>
-        <SiteProvider>
-          <AppRouter />
-          <Toaster position="top-center" theme="dark" richColors />
-        </SiteProvider>
-      </BrowserRouter>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <SiteProvider>
+            <AppRouter />
+            <Toaster position="top-center" theme="dark" richColors />
+          </SiteProvider>
+        </BrowserRouter>
+      </ErrorBoundary>
     </div>
   );
 }
