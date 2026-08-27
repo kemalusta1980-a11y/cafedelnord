@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, Globe, Check } from "lucide-react";
 import { useSite } from "../context/SiteContext";
 import { events } from "../lib/analytics";
 
@@ -13,8 +13,54 @@ const links = [
   { to: "/iletisim", key: "contact" },
 ];
 
+const LangMenu = ({ mobile = false }) => {
+  const { lang, setLang, langs } = useSite();
+  const [open, setOpen] = useState(false);
+  const current = langs.find((l) => l.code === lang);
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 font-display text-xs font-bold tracking-widest text-white/60 hover:text-gold transition-colors py-2"
+        data-testid={mobile ? "mobile-lang-toggle" : "lang-toggle"}
+      >
+        <Globe size={14} /> {current?.short}
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={{ duration: 0.2 }}
+            className={`absolute z-50 min-w-[9.5rem] backdrop-blur-xl bg-[#0d0d0d]/95 border border-white/15 rounded-xl overflow-hidden shadow-2xl ${
+              mobile ? "bottom-full mb-2 left-0" : "top-full mt-2 right-0"
+            }`}
+            data-testid="lang-menu"
+          >
+            {langs.map((l) => (
+              <button
+                key={l.code}
+                onClick={() => { setLang(l.code); setOpen(false); }}
+                className={`w-full flex items-center justify-between gap-4 px-4 py-2.5 text-sm text-left transition-colors ${
+                  l.code === lang ? "text-gold bg-white/5" : "text-white/70 hover:text-white hover:bg-white/5"
+                }`}
+                data-testid={`lang-option-${l.code}`}
+              >
+                {l.label}
+                {l.code === lang && <Check size={14} />}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 export const Navbar = () => {
-  const { t, settings, lang, toggleLang } = useSite();
+  const { t, settings } = useSite();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -59,9 +105,7 @@ export const Navbar = () => {
         </nav>
 
         <div className="hidden lg:flex items-center gap-4">
-          <button onClick={toggleLang} data-testid="lang-toggle" className="font-display text-xs font-bold tracking-widest text-white/50 hover:text-gold transition-colors">
-            {lang === "tr" ? "EN" : "TR"}
-          </button>
+          <LangMenu />
           {settings?.reservation_enabled && (
             <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-solid !py-2.5 !px-5" data-testid="nav-reservation-btn">
               {t("reservation")}
@@ -109,9 +153,7 @@ export const Navbar = () => {
                     <Phone size={16} />
                   </a>
                 )}
-                <button onClick={toggleLang} className="font-display text-sm font-bold text-white/50" data-testid="mobile-lang-toggle">
-                  {lang === "tr" ? "EN" : "TR"}
-                </button>
+                <LangMenu mobile />
               </div>
             </div>
           </motion.div>

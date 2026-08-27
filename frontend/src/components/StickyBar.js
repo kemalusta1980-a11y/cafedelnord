@@ -19,12 +19,12 @@ export const StickyBar = () => {
         <a href={s.phone ? `tel:${s.phone.replace(/[^\d+]/g, "")}` : "#"} onClick={events.phoneCall}
           className="flex flex-col items-center gap-1 py-3 text-white/70 active:text-gold border-x border-white/10" data-testid="sticky-call-btn">
           <Phone size={19} />
-          <span className="text-[0.65rem] font-display font-bold uppercase tracking-wider">Ara</span>
+          <span className="text-[0.65rem] font-display font-bold uppercase tracking-wider">{t("call")}</span>
         </a>
         <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions}
           className="flex flex-col items-center gap-1 py-3 text-white/70 active:text-gold" data-testid="sticky-directions-btn">
           <Navigation size={19} />
-          <span className="text-[0.65rem] font-display font-bold uppercase tracking-wider">Yol Tarifi</span>
+          <span className="text-[0.65rem] font-display font-bold uppercase tracking-wider">{t("directionsShort")}</span>
         </a>
       </div>
     </div>

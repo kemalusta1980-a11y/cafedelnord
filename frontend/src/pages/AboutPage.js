@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useSite } from "../context/SiteContext";
-import { Reveal } from "../components/Reveal";
+import { Reveal, GoldTitle } from "../components/Reveal";
 
 const chapters = [
   { num: "01", title: "Atmosfer", text: "Sıcak, samimi ve modern bir ortamda; ister kahvenizi yudumlayın, ister sevdiklerinizle uzun sohbetlere dalın.", img: "/images/kahve-atmosfer.jpg" },
@@ -11,16 +11,16 @@ const chapters = [
 ];
 
 export default function AboutPage() {
-  const { settings } = useSite();
+  const { settings, t } = useSite();
   const s = settings || {};
 
   return (
     <div className="pt-28 sm:pt-36 pb-24" data-testid="about-page">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <Reveal>
-          <p className="eyebrow mb-4">Hikayemiz</p>
+          <p className="eyebrow mb-4">{t("aboutEyebrow")}</p>
           <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tighter mb-6">
-            Bir Cafeden <span className="text-gold">Daha Fazlası</span>
+            <GoldTitle text={t("aboutTitle")} />
           </h1>
           <p className="text-white/55 max-w-2xl text-base sm:text-lg leading-relaxed" data-testid="about-intro">
             {s.about_text}
@@ -49,7 +49,7 @@ export default function AboutPage() {
             “{s.vision_text}”
           </p>
           <Link to="/menu" className="btn-pill btn-solid mt-10" data-testid="about-menu-btn">
-            Menüyü Keşfedin <ArrowRight size={16} />
+            {t("exploreMenu")} <ArrowRight size={16} />
           </Link>
         </Reveal>
       </div>

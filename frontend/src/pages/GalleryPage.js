@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { api } from "../lib/api";
-import { Reveal } from "../components/Reveal";
+import { useSite } from "../context/SiteContext";
+import { Reveal, GoldTitle } from "../components/Reveal";
 
 export default function GalleryPage() {
+  const { t } = useSite();
   const [photos, setPhotos] = useState([]);
   const [index, setIndex] = useState(null);
 
@@ -18,9 +20,9 @@ export default function GalleryPage() {
     <div className="pt-28 sm:pt-36 pb-24" data-testid="gallery-page">
       <div className="max-w-7xl mx-auto px-5 sm:px-8">
         <Reveal>
-          <p className="eyebrow mb-4">Kareler</p>
+          <p className="eyebrow mb-4">{t("galleryEyebrow")}</p>
           <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tighter mb-12">
-            Gale<span className="text-gold">ri</span>
+            <GoldTitle text={t("galleryTitle")} />
           </h1>
         </Reveal>
 

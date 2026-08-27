@@ -124,6 +124,15 @@ body {
 .cat-chip:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.3); }
 .cat-chip.active { background: var(--gold); border-color: var(--gold); color: #030303; }
 
+/* Arabic (RTL): letter-spacing breaks Arabic ligatures */
+html[dir="rtl"] .font-display,
+html[dir="rtl"] .eyebrow,
+html[dir="rtl"] .btn-pill,
+html[dir="rtl"] .cat-chip,
+html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 {
+  letter-spacing: 0 !important;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

@@ -3,12 +3,14 @@ import { toast } from "sonner";
 import { Plus, Pencil, Trash2, Eye, EyeOff, Star, Upload } from "lucide-react";
 import { api } from "../../lib/api";
 
-const empty = { category_id: "", name: "", name_en: "", description: "", description_en: "", price: "", image: "", order: 0, visible: true, featured: false };
+const empty = { category_id: "", name: "", description: "", price: "", image: "", order: 0, visible: true, featured: false };
+const TRANS_LANGS = [["en", "İngilizce"], ["de", "Almanca"], ["ru", "Rusça"], ["ar", "Arapça"]];
 const inputCls = "w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-gold/60";
 
 export const AdminItems = () => {
   const [menu, setMenu] = useState([]);
   const [editing, setEditing] = useState(null);
+  const [transLang, setTransLang] = useState("en");
   const [uploading, setUploading] = useState(false);
   const fileRef = useRef(null);
 
@@ -83,10 +85,6 @@ export const AdminItems = () => {
               <input value={editing.name} onChange={set("name")} className={inputCls} data-testid="item-name-input" />
             </div>
             <div>
-              <label className="text-xs text-white/50 block mb-1">Ürün Adı (EN — opsiyonel)</label>
-              <input value={editing.name_en || ""} onChange={set("name_en")} className={inputCls} data-testid="item-name-en-input" />
-            </div>
-            <div>
               <label className="text-xs text-white/50 block mb-1">Fiyat (₺ — boş bırakılabilir)</label>
               <input value={editing.price ?? ""} onChange={set("price")} type="number" step="0.01" className={inputCls} data-testid="item-price-input" />
             </div>
@@ -94,9 +92,28 @@ export const AdminItems = () => {
               <label className="text-xs text-white/50 block mb-1">Açıklama (TR)</label>
               <textarea value={editing.description} onChange={set("description")} rows={2} className={inputCls} data-testid="item-desc-input" />
             </div>
-            <div className="sm:col-span-2">
-              <label className="text-xs text-white/50 block mb-1">Açıklama (EN — opsiyonel)</label>
-              <textarea value={editing.description_en || ""} onChange={set("description_en")} rows={2} className={inputCls} data-testid="item-desc-en-input" />
+            <div className="sm:col-span-2 border border-white/10 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3 flex-wrap">
+                <span className="text-xs text-white/50">Çeviriler (opsiyonel):</span>
+                {TRANS_LANGS.map(([code, label]) => (
+                  <button key={code} type="button" onClick={() => setTransLang(code)}
+                    className={`cat-chip !py-1 !px-3 !text-[0.65rem] ${transLang === code ? "active" : ""}`}
+                    data-testid={`trans-lang-${code}`}>
+                    {label}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs text-white/50 block mb-1">Ürün Adı ({transLang.toUpperCase()})</label>
+                  <input dir={transLang === "ar" ? "rtl" : "ltr"} value={editing[`name_${transLang}`] || ""} onChange={set(`name_${transLang}`)} className={inputCls} data-testid="item-name-trans-input" />
+                </div>
+                <div>
+                  <label className="text-xs text-white/50 block mb-1">Açıklama ({transLang.toUpperCase()})</label>
+                  <textarea dir={transLang === "ar" ? "rtl" : "ltr"} value={editing[`description_${transLang}`] || ""} onChange={set(`description_${transLang}`)} rows={2} className={inputCls} data-testid="item-desc-trans-input" />
+                </div>
+              </div>
+              <p className="text-[0.65rem] text-white/30 mt-2">Boş bırakılan çeviriler sitede Türkçe içerikle gösterilir.</p>
             </div>
             <div>
               <label className="text-xs text-white/50 block mb-1">Ürün Görseli</label>

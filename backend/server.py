@@ -37,6 +37,9 @@ class Category(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     name: str
     name_en: Optional[str] = None
+    name_de: Optional[str] = None
+    name_ru: Optional[str] = None
+    name_ar: Optional[str] = None
     slug: str
     order: int = 0
     visible: bool = True
@@ -47,8 +50,14 @@ class MenuItem(BaseModel):
     category_id: str
     name: str
     name_en: Optional[str] = None
+    name_de: Optional[str] = None
+    name_ru: Optional[str] = None
+    name_ar: Optional[str] = None
     description: str = ""
     description_en: Optional[str] = None
+    description_de: Optional[str] = None
+    description_ru: Optional[str] = None
+    description_ar: Optional[str] = None
     price: Optional[float] = None
     image: Optional[str] = None
     order: int = 0
@@ -317,7 +326,7 @@ async def create_category(body: CategoryIn, user=Depends(require_admin)):
 
 @api_router.put("/admin/categories/{cat_id}")
 async def update_category(cat_id: str, body: dict, user=Depends(require_admin)):
-    allowed = {k: v for k, v in body.items() if k in {"name", "name_en", "slug", "order", "visible"}}
+    allowed = {k: v for k, v in body.items() if k in {"name", "name_en", "name_de", "name_ru", "name_ar", "slug", "order", "visible"}}
     r = await db.categories.update_one({"id": cat_id}, {"$set": allowed})
     if r.matched_count == 0:
         raise HTTPException(status_code=404, detail="Kategori bulunamadı")
@@ -335,8 +344,14 @@ class MenuItemIn(BaseModel):
     category_id: str
     name: str
     name_en: Optional[str] = None
+    name_de: Optional[str] = None
+    name_ru: Optional[str] = None
+    name_ar: Optional[str] = None
     description: str = ""
     description_en: Optional[str] = None
+    description_de: Optional[str] = None
+    description_ru: Optional[str] = None
+    description_ar: Optional[str] = None
     price: Optional[float] = None
     image: Optional[str] = None
     order: int = 0
@@ -353,7 +368,8 @@ async def create_item(body: MenuItemIn, user=Depends(require_admin)):
 
 @api_router.put("/admin/items/{item_id}")
 async def update_item(item_id: str, body: dict, user=Depends(require_admin)):
-    allowed_keys = {"category_id", "name", "name_en", "description", "description_en",
+    allowed_keys = {"category_id", "name", "name_en", "name_de", "name_ru", "name_ar",
+                    "description", "description_en", "description_de", "description_ru", "description_ar",
                     "price", "image", "order", "visible", "featured"}
     allowed = {k: v for k, v in body.items() if k in allowed_keys}
     r = await db.menu_items.update_one({"id": item_id}, {"$set": allowed})

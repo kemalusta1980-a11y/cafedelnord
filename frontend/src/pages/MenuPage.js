@@ -3,7 +3,7 @@ import { Search } from "lucide-react";
 import { api } from "../lib/api";
 import { useSite } from "../context/SiteContext";
 import { events } from "../lib/analytics";
-import { Reveal } from "../components/Reveal";
+import { Reveal, GoldTitle } from "../components/Reveal";
 import { MenuItemCard } from "../components/MenuItemCard";
 
 export default function MenuPage() {
@@ -36,11 +36,9 @@ export default function MenuPage() {
         <Reveal>
           <p className="eyebrow mb-4">Cafe Del Nord</p>
           <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl tracking-tighter mb-4">
-            Menü<span className="text-gold">müz</span>
+            <GoldTitle text={t("menuTitle")} />
           </h1>
-          <p className="text-white/50 max-w-xl mb-10">
-            Birinci sınıf ürünlerle, usta şeflerin deneyimiyle hazırlanan lezzetlerimiz.
-          </p>
+          <p className="text-white/50 max-w-xl mb-10">{t("menuSubtitle")}</p>
         </Reveal>
       </div>
 
@@ -49,7 +47,7 @@ export default function MenuPage() {
         <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center gap-3">
           <div className="flex gap-2 overflow-x-auto pb-1 flex-1 [scrollbar-width:none]">
             <button className={`cat-chip ${active === "all" ? "active" : ""}`} onClick={() => setActive("all")} data-testid="cat-chip-all">
-              Tümü
+              {t("all")}
             </button>
             {menu.map((c) => (
               <button
@@ -58,7 +56,7 @@ export default function MenuPage() {
                 onClick={() => { setActive(c.id); events.menuView(c.name); }}
                 data-testid={`cat-chip-${c.slug}`}
               >
-                {lang === "en" && c.name_en ? c.name_en : c.name}
+                {localName(c)}
               </button>
             ))}
           </div>
@@ -77,16 +75,14 @@ export default function MenuPage() {
 
       <div className="max-w-7xl mx-auto px-5 sm:px-8 mt-14 space-y-20">
         {filtered.length === 0 && menu.length > 0 && (
-          <p className="text-white/40 text-center py-16" data-testid="menu-no-results">Aramanızla eşleşen ürün bulunamadı.</p>
+          <p className="text-white/40 text-center py-16" data-testid="menu-no-results">{t("noResults")}</p>
         )}
         {filtered.map((cat) => (
           <section key={cat.id} data-testid={`menu-category-${cat.slug}`}>
             <Reveal>
               <div className="flex items-baseline gap-4 mb-8">
-                <h2 className="font-serif-editorial italic text-3xl sm:text-4xl">
-                  {lang === "en" && cat.name_en ? cat.name_en : cat.name}
-                </h2>
-                <span className="text-white/25 text-sm">{cat.items.length} ürün</span>
+                <h2 className="font-serif-editorial italic text-3xl sm:text-4xl">{localName(cat)}</h2>
+                <span className="text-white/25 text-sm">{cat.items.length} {t("items")}</span>
               </div>
             </Reveal>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

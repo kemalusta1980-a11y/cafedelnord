@@ -3,8 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Cookie } from "lucide-react";
 import { Link } from "react-router-dom";
 import { safeStorage } from "../lib/storage";
+import { useSite } from "../context/SiteContext";
 
 export const CookieConsent = () => {
+  const { t } = useSite();
   const [visible, setVisible] = useState(() => !safeStorage.get("cdn_cookie_consent"));
 
   const decide = (value) => {
@@ -27,16 +29,16 @@ export const CookieConsent = () => {
             <Cookie className="text-gold shrink-0 mt-0.5" size={20} />
             <div>
               <p className="text-sm text-white/80 leading-relaxed">
-                Deneyiminizi iyileştirmek için çerezler kullanıyoruz. Detaylar için{" "}
-                <Link to="/cerez-politikasi" className="text-gold underline" data-testid="cookie-policy-link">Çerez Politikası</Link>
-                {" "}sayfamıza göz atabilirsiniz.
+                {t("cookieText")}{" "}
+                <Link to="/cerez-politikasi" className="text-gold underline" data-testid="cookie-policy-link">{t("cookieLink")}</Link>
+                {" "}{t("cookieText2")}
               </p>
               <div className="flex gap-3 mt-4">
                 <button onClick={() => decide("accepted")} className="btn-pill btn-solid !py-2 !px-4 !text-xs" data-testid="cookie-accept-btn">
-                  Kabul Et
+                  {t("accept")}
                 </button>
                 <button onClick={() => decide("rejected")} className="btn-pill btn-ghost !py-2 !px-4 !text-xs" data-testid="cookie-reject-btn">
-                  Reddet
+                  {t("reject")}
                 </button>
               </div>
             </div>

@@ -6,7 +6,7 @@ import { Phone, Navigation, ArrowRight, Instagram, Megaphone } from "lucide-reac
 import { api } from "../lib/api";
 import { useSite } from "../context/SiteContext";
 import { events } from "../lib/analytics";
-import { Reveal, MaskedLines } from "../components/Reveal";
+import { Reveal, MaskedLines, GoldTitle } from "../components/Reveal";
 import { MenuItemCard } from "../components/MenuItemCard";
 
 const manifesto = [
@@ -53,7 +53,7 @@ export default function Home() {
           </motion.p>
 
           <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] tracking-tighter leading-[0.95] max-w-4xl" data-testid="hero-title">
-            <MaskedLines lines={["EFSANE LEZZET", "SİZLERLE."]} delay={0.25} />
+            <MaskedLines key={t("heroLine1")} lines={[t("heroLine1"), t("heroLine2")]} delay={0.25} />
           </h1>
 
           <motion.p
@@ -115,13 +115,13 @@ export default function Home() {
       {/* FEATURED */}
       <section className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32" data-testid="featured-section">
         <Reveal>
-          <p className="eyebrow mb-4">Favoriler</p>
+          <p className="eyebrow mb-4">{t("favorites")}</p>
           <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
             <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tighter">
-              Öne Çıkan <span className="text-gold">Lezzetler</span>
+              <GoldTitle text={t("featuredTitle")} />
             </h2>
             <Link to="/menu" className="font-display text-sm font-bold uppercase tracking-widest text-white/50 hover:text-gold transition-colors flex items-center gap-2" data-testid="featured-view-all">
-              Tüm Menü <ArrowRight size={15} />
+              {t("allMenu")} <ArrowRight size={15} />
             </Link>
           </div>
         </Reveal>
@@ -140,7 +140,7 @@ export default function Home() {
       <section className="border-t border-white/5 bg-[#050505]" data-testid="manifesto-section">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
           <Reveal>
-            <p className="eyebrow mb-16">Neden Cafe Del Nord</p>
+            <p className="eyebrow mb-16">{t("whyUs")}</p>
           </Reveal>
           <div className="space-y-20">
             {manifesto.map((m, i) => (
@@ -165,14 +165,11 @@ export default function Home() {
         </div>
         <div className="flex flex-col justify-center px-6 sm:px-14 py-16 lg:py-24">
           <Reveal>
-            <p className="eyebrow mb-5">Kahve Ritüeli</p>
-            <h2 className="font-serif-editorial italic text-4xl sm:text-5xl lg:text-6xl mb-8">Kahve?</h2>
-            <p className="text-white/55 leading-relaxed max-w-md mb-10">
-              Yetiştirildiği bölgenin en kaliteli kahve çekirdeklerinden hazırladığımız kahve çeşitlerimizi denediğinizde,
-              damağınızda kalan yöresel lezzeti unutamayacaksınız.
-            </p>
+            <p className="eyebrow mb-5">{t("coffeeEyebrow")}</p>
+            <h2 className="font-serif-editorial italic text-4xl sm:text-5xl lg:text-6xl mb-8">{t("coffeeTitle")}</h2>
+            <p className="text-white/55 leading-relaxed max-w-md mb-10">{t("coffeeBody")}</p>
             <Link to="/menu" className="btn-pill btn-ghost w-fit" data-testid="coffee-menu-btn">
-              Kahve Menümüz <ArrowRight size={15} />
+              {t("coffeeBtn")} <ArrowRight size={15} />
             </Link>
           </Reveal>
         </div>
@@ -182,13 +179,11 @@ export default function Home() {
       <section className="grid grid-cols-1 lg:grid-cols-2 border-t border-white/5" data-testid="dessert-section">
         <div className="flex flex-col justify-center px-6 sm:px-14 py-16 lg:py-24 order-2 lg:order-1">
           <Reveal>
-            <p className="eyebrow mb-5">Tatlı Bir Mola</p>
-            <h2 className="font-serif-editorial italic text-4xl sm:text-5xl lg:text-6xl mb-8">Tatlılar</h2>
-            <p className="text-white/55 leading-relaxed max-w-md mb-10">
-              Geleneksel tatlılar, pastalar, waffle ve diğerleri. Tadına doyulmaz muhteşem lezzetler sizi bekliyor.
-            </p>
+            <p className="eyebrow mb-5">{t("dessertEyebrow")}</p>
+            <h2 className="font-serif-editorial italic text-4xl sm:text-5xl lg:text-6xl mb-8">{t("dessertTitle")}</h2>
+            <p className="text-white/55 leading-relaxed max-w-md mb-10">{t("dessertBody")}</p>
             <Link to="/menu" className="btn-pill btn-ghost w-fit" data-testid="dessert-menu-btn">
-              Tatlı Menümüz <ArrowRight size={15} />
+              {t("dessertBtn")} <ArrowRight size={15} />
             </Link>
           </Reveal>
         </div>
@@ -202,18 +197,14 @@ export default function Home() {
         <div className="max-w-4xl mx-auto px-5 sm:px-8 py-24 text-center">
           <Reveal>
             <Instagram className="mx-auto text-gold mb-6" size={32} />
-            <h2 className="font-display font-black text-3xl sm:text-4xl tracking-tighter mb-4">
-              Bizi Instagram'da Takip Edin
-            </h2>
-            <p className="text-white/50 mb-8 max-w-md mx-auto">
-              En yeni lezzetlerimizi ve restoranımızdan kareleri kaçırmayın.
-            </p>
+            <h2 className="font-display font-black text-3xl sm:text-4xl tracking-tighter mb-4">{t("igTitle")}</h2>
+            <p className="text-white/50 mb-8 max-w-md mx-auto">{t("igBody")}</p>
             {s.instagram ? (
               <a href={s.instagram} target="_blank" rel="noreferrer" onClick={events.instagramClick} className="btn-pill btn-solid" data-testid="instagram-follow-btn">
-                <Instagram size={16} /> Takip Et
+                <Instagram size={16} /> {t("igBtn")}
               </a>
             ) : (
-              <p className="text-xs text-white/30 italic">Instagram hesabı admin panelinden eklenebilir.</p>
+              <p className="text-xs text-white/30 italic">{t("addLater")}</p>
             )}
           </Reveal>
         </div>

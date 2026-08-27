@@ -15,8 +15,8 @@ export const Footer = () => {
             CAFE <span className="text-gold">DEL NORD</span>
           </p>
           <p className="text-sm text-white/50 leading-relaxed mb-6">
-            {s.tagline ? s.tagline.charAt(0).toUpperCase() + s.tagline.slice(1) : "Bir cafeden daha fazlası"}.
-            Taş fırında kumpir, el yapımı burgerler, taze çekilmiş kahveler ve tadına doyulmaz tatlılar.
+            {s.tagline ? s.tagline.charAt(0).toUpperCase() + s.tagline.slice(1) : "Bir cafeden daha fazlası"}.{" "}
+            {t("footerDesc")}
           </p>
           <div className="flex gap-3">
             {s.instagram && (
@@ -32,7 +32,7 @@ export const Footer = () => {
               </a>
             )}
             {!s.instagram && !s.facebook && (
-              <p className="text-xs text-white/30 italic">Sosyal medya hesapları admin panelinden eklenebilir.</p>
+              <p className="text-xs text-white/30 italic">{t("addLater")}</p>
             )}
           </div>
         </div>
@@ -68,7 +68,7 @@ export const Footer = () => {
               {s.address ? (
                 <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions} className="hover:text-gold transition-colors" data-testid="footer-address">{s.address}</a>
               ) : (
-                <span className="italic text-white/30">Adres bilgisi admin panelinden eklenebilir</span>
+                <span className="italic text-white/30">{t("addLater")}</span>
               )}
             </li>
             <li className="flex items-start gap-3">
@@ -76,11 +76,11 @@ export const Footer = () => {
               <span data-testid="footer-hours">
                 {s.hours_weekday || s.hours_weekend ? (
                   <>
-                    {s.hours_weekday && <span className="block">Hafta içi: {s.hours_weekday}</span>}
-                    {s.hours_weekend && <span className="block">Hafta sonu: {s.hours_weekend}</span>}
+                    {s.hours_weekday && <span className="block">{t("weekdays")}: {s.hours_weekday}</span>}
+                    {s.hours_weekend && <span className="block">{t("weekend")}: {s.hours_weekend}</span>}
                   </>
                 ) : (
-                  <span className="italic text-white/30">Çalışma saatleri admin panelinden eklenebilir</span>
+                  <span className="italic text-white/30">{t("addLater")}</span>
                 )}
               </span>
             </li>
@@ -88,17 +88,17 @@ export const Footer = () => {
         </div>
 
         <div>
-          <p className="eyebrow mb-5">Yasal</p>
+          <p className="eyebrow mb-5">{t("legal")}</p>
           <ul className="space-y-3 text-sm">
-            <li><Link to="/gizlilik-politikasi" className="text-white/50 hover:text-gold transition-colors" data-testid="footer-privacy">Gizlilik Politikası</Link></li>
-            <li><Link to="/kvkk" className="text-white/50 hover:text-gold transition-colors" data-testid="footer-kvkk">KVKK Aydınlatma Metni</Link></li>
-            <li><Link to="/cerez-politikasi" className="text-white/50 hover:text-gold transition-colors" data-testid="footer-cookies">Çerez Politikası</Link></li>
-            <li><Link to="/admin" className="text-white/25 hover:text-white/50 transition-colors text-xs" data-testid="footer-admin">Yönetim</Link></li>
+            <li><Link to="/gizlilik-politikasi" className="text-white/50 hover:text-gold transition-colors" data-testid="footer-privacy">{t("privacy")}</Link></li>
+            <li><Link to="/kvkk" className="text-white/50 hover:text-gold transition-colors" data-testid="footer-kvkk">{t("kvkk")}</Link></li>
+            <li><Link to="/cerez-politikasi" className="text-white/50 hover:text-gold transition-colors" data-testid="footer-cookies">{t("cookiePolicy")}</Link></li>
+            <li><Link to="/admin" className="text-white/25 hover:text-white/50 transition-colors text-xs" data-testid="footer-admin">Admin</Link></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-white/5 py-6 text-center text-xs text-white/30">
-        © {new Date().getFullYear()} Cafe Del Nord. Tüm hakları saklıdır.
+        © {new Date().getFullYear()} Cafe Del Nord. {t("rights")}
       </div>
     </footer>
   );

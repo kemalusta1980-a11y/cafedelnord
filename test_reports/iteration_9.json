@@ -1,0 +1,20 @@
+{
+  "summary": "Iteration 9: Full i18n feature verification for TR/EN/DE/RU/AR. Frontend: lang-toggle opens lang-menu with 5 options; DE/RU/AR switch updates html.lang and html.dir (rtl for AR only); hero + nav + footer + cookie banner translate correctly (LEGENDÄRER GESCHMACK, ЛЕГЕНДАРНЫЙ ВКУС, مذاق أسطوري). Persistence works — reload preserves DE. /menu DE shows 'Unsere Karte', placeholder 'In der Karte suchen...', 'Alle' chip; translated item name 'Ofenkartoffel' displayed once backend field set. /iletisim DE shows Telefon/Adresse/E-Mail/Öffnungszeiten. /galeri RU shows 'Галерея'. Mobile 390x844: mobile-lang-toggle inside hamburger menu opens lang-menu; switching to DE translates all mobile nav links (Startseite, Speisekarte, Über Uns, Galerie, Kontakt) and cookie banner. Backend: PUT /api/admin/items/{id} with name_de/name_ru/name_ar/description_de returns 200 {ok:true}; GET /api/menu returns those fields on the item. Admin UI: item edit form shows trans-lang-en/de/ru/ar tabs; DE data persists. NO pageerror, NO error-boundary, NO uncaught console errors across all flows.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "test_report_links": ["/app/backend/tests/backend_test.py"],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "SiteContext localName/localDesc fallback pattern is clean: (lang !== 'tr' && item[`name_${lang}`]) || item.name — correctly falls back to TR when translation empty (as designed).",
+    "LangMenu dropdown does not close on outside click (only on re-toggle or option select); acknowledged by main agent as known minor UX quirk, not a bug.",
+    "MenuItem model in backend exposes name_en/description_en explicitly but name_de/ru/ar and description_de/ru/ar only appear in response if set on the document (Mongo-level absence). Consistent, but consider defaulting to null for uniform response schema.",
+    "html[dir=rtl] letter-spacing:0 rule preserves Arabic ligatures — good."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Admin session created via mongosh (role:admin) then cleaned up. See /app/auth_testing.md.",
+  "seed_data_creation": "Temporarily set name_de='Ofenkartoffel', name_ru, name_ar, description_de on Kumpir item; reverted to null after test. Test user/session removed.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "i18n feature is fully working end-to-end (frontend + backend + admin). Menu item content stays TR when translation field empty — this is by design (fallback). Reservation still disabled; expect 403 on POST /api/reservations. Admin auth via mongosh session per /app/auth_testing.md. Dropdown outside-click-close is a known UX quirk, not a bug."
+}

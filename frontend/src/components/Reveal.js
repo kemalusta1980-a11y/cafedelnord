@@ -29,3 +29,13 @@ export const MaskedLines = ({ lines, className = "", delay = 0 }) => (
     ))}
   </span>
 );
+
+export const GoldTitle = ({ text }) => {
+  const words = text.split(" ");
+  if (words.length === 1) return <span className="text-gold">{text}</span>;
+  return (
+    <>
+      {words.slice(0, -1).join(" ")} <span className="text-gold">{words[words.length - 1]}</span>
+    </>
+  );
+};
