@@ -4,6 +4,14 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@/index.css";
 import App from "@/App";
 
+// Suppress benign ResizeObserver loop errors (Lenis/framer-motion) from error overlays
+window.addEventListener("error", (e) => {
+  if (/ResizeObserver loop/i.test(e.message || "")) {
+    e.stopImmediatePropagation();
+    e.preventDefault();
+  }
+});
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
