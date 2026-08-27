@@ -1,0 +1,145 @@
+{
+  "project_context": {
+    "name": "CAFE DEL NORD",
+    "type": "hybrid_fullstack",
+    "theme": "dark_mode_priority",
+    "archetype": "Luxury / Premium Restaurant",
+    "vibe": "Modern, Minimal, Premium, Fresh, Visual-Heavy, Awwwards-style",
+    "target_emotions": "Modern, Delicious, Quality, Warm, Reliable, Premium"
+  },
+  "typography": {
+    "font_strategy": "The 'Old Money Tech' / 'Editorial Future' mix",
+    "headings": {
+      "primary": "Cabinet Grotesk",
+      "secondary": "Cormorant Garamond",
+      "weights": "Light (300) for elegance, Black (900) for kinetic impact",
+      "usage": "Use Cabinet Grotesk for large kinetic hero text and UI labels. Use Cormorant Garamond for manifesto, quotes, and editorial marquee."
+    },
+    "body": {
+      "family": "Manrope",
+      "weights": "Regular (400), Medium (500)",
+      "usage": "Clean, highly readable typography for menu items, descriptions, and standard text."
+    },
+    "scale": {
+      "hero_h1": "text-5xl sm:text-6xl tracking-tighter leading-none font-black",
+      "section_h2": "text-3xl sm:text-4xl tracking-tight font-light",
+      "body": "text-base sm:text-lg leading-relaxed"
+    }
+  },
+  "colors": {
+    "backgrounds": {
+      "base": "#030303",
+      "surface_elevated": "#0D0D0D",
+      "surface_glass": "rgba(3, 3, 3, 0.6)"
+    },
+    "text": {
+      "primary": "#FAFAFA",
+      "secondary": "#A1A1A1",
+      "muted": "#525252"
+    },
+    "accents": {
+      "primary": "#D4AF37",
+      "warm_food": "#E55B3C",
+      "border": "rgba(255, 255, 255, 0.1)"
+    },
+    "rules": [
+      "Keep the interface mostly monochrome (#030303 to #FAFAFA) to let the rich, warm colors of the food photography stand out.",
+      "Never use pure black or pure white. Use the specified base and primary text colors.",
+      "CRITICAL: Do NOT use complete transparent backgrounds for overlays, sticky navs, or dropdowns. Always use 'backdrop-blur-xl bg-black/80' to maintain readability."
+    ]
+  },
+  "visual_enhancers": {
+    "surfaces": {
+      "header": "Crystal Glass variant: backdrop-blur-xl bg-[#030303]/70 with border-b border-white/10.",
+      "cards": "Subtle elevation: bg-[#0D0D0D] border border-white/5 rounded-2xl hover:border-white/15 transition-colors."
+    },
+    "image_treatment": {
+      "style": "Spotlight/Clipped Frame. Wrap images in strict aspect ratios (e.g., aspect-[4/5] or aspect-square) with overflow-hidden and rounded-xl.",
+      "hover": "Scale image on hover (scale-105) with long transition (duration-700 ease-out) while keeping the container clipped."
+    },
+    "spacing": "Generous Spacing Philosophy. Use p-12 to p-24 for section paddings. Let the content breathe. Do NOT cramp the menu."
+  },
+  "layouts": {
+    "hero": "Full viewport height (min-h-screen). Kinetic typography centered or strongly left-aligned. Subtle parallax background.",
+    "menu": "Sticky category sidebar (desktop) / horizontal scroll nav (mobile) alongside a single-column or two-column masonry list of dishes.",
+    "manifesto": "Asymmetrical layout. Large numbers (01, 02) paired with Cormorant Garamond serif text. Massive negative space.",
+    "gallery": "Bento/Masonry grid. Mix aspect ratios (tall, wide, square). No uniform squares.",
+    "mobile": "Mobile-first approach. Add a fixed bottom 'Sticky Action Bar' (Menu | Search | Directions) with high z-index and glassmorphism."
+  },
+  "components": {
+    "KineticHero": {
+      "description": "Masked line-by-line reveal on load.",
+      "slogans": ["BİR CAFEDEN DAHA FAZLASI", "EFSANE LEZZET SİZLERLE"],
+      "ctas": ["Menüyü İncele", "Yol Tarifi Al", "Bizi Ara", "Rezervasyon Yap"]
+    },
+    "EditorialMarquee": {
+      "description": "Slow moving, large serif text ('Cormorant Garamond') running seamlessly across the screen. Low contrast (e.g., text-white/10).",
+      "library": "react-fast-marquee"
+    },
+    "MenuSection": {
+      "categories": ["Ana Yemekler", "Tatlılar", "Soğuk İçecekler", "Sıcak İçecekler"],
+      "features": "Sticky category nav, product search input."
+    }
+  },
+  "motion": {
+    "scrolling": "MANDATORY: Use '@studio-freight/lenis' for smooth momentum scrolling.",
+    "reveals": "Use 'framer-motion'. Elements should fade in and slide up slightly (y: 20, opacity: 0 -> y: 0, opacity: 1) as they enter the viewport.",
+    "micro_interactions": "Magnetic buttons, slow image zooms on hover, subtle background color shifts."
+  },
+  "media": {
+    "strategy": "Primary visual weight goes to the food. Let the images carry the warmth of the site.",
+    "local_images": {
+      "base_path": "/images/",
+      "files": [
+        "kumpir.jpg",
+        "et-burger.jpg",
+        "pizza.jpg",
+        "kunefe.jpg",
+        "waffle.jpg",
+        "espresso.jpg",
+        "latte.jpg",
+        "serpme.jpg",
+        "karisik-izgara.jpg",
+        "milkshake.jpg",
+        "kahve-atmosfer.jpg",
+        "tatli-atmosfer.jpg",
+        "burger-atmosfer.jpg",
+        "icecek-atmosfer.jpg"
+      ],
+      "instruction": "Map these EXACT local filenames to the respective menu items and gallery sections."
+    },
+    "ambient_images": [
+      {
+        "url": "https://images.unsplash.com/photo-1726835498689-b4f6dbcdbdfb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwyfHxsdXh1cnklMjBkYXJrJTIwY2FmZSUyMGludGVyaW9yfGVufDB8fHx8MTc4NzgzOTgwMnww&ixlib=rb-4.1.0&q=85",
+        "description": "Luxury dark cafe interior (Bar/Stools) - use for hero background or ambient parallax."
+      },
+      {
+        "url": "https://images.unsplash.com/photo-1680946496238-5272d3c407fc?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwzfHxsdXh1cnklMjBkYXJrJTIwY2FmZSUyMGludGVyaW9yfGVufDB8fHx8MTc4NzgzOTgwMnww&ixlib=rb-4.1.0&q=85",
+        "description": "Dimly lit premium restaurant room - use for reservations or about section."
+      }
+    ]
+  },
+  "accessibility": {
+    "contrast": "Ensure text over dark backgrounds maintains WCAG AA contrast. Use text-shadow if overlaying text on images.",
+    "testing": "All interactive and key informational elements MUST include a 'data-testid' attribute (e.g., data-testid='hero-menu-button').",
+    "animations": "Respect prefers-reduced-motion media query for all framer-motion animations."
+  },
+  "instructions_to_main_agent": [
+    "You have .js files, NOT .tsx files. Write React components in standard JSX (.js) syntax.",
+    "Do NOT use HTML-based components for advanced interactions. Use Shadcn components for forms, dialogs, dropdowns.",
+    "Use pure HTML/Tailwind for the main marketing grid and layout structures. Shadcn 'Card' is too rigid for Awwwards-style layouts.",
+    "Do not center-align the main App container (.App { text-align: center } is FORBIDDEN).",
+    "Never use generic placeholder image URLs. Use the local '/images/' assets as defined in this JSON.",
+    "Do not use dark colors as gradients.",
+    "Apply 'data-testid' to every button, input, and interactive link.",
+    "Do NOT use complete transparent backgrounds for overlays, dropdowns, or sticky navs. ALWAYS use backdrop-blur and a semi-transparent color."
+  ],
+  "libraries_to_install": [
+    "framer-motion",
+    "@studio-freight/lenis",
+    "react-fast-marquee",
+    "lucide-react",
+    "clsx",
+    "tailwind-merge"
+  ]
+}

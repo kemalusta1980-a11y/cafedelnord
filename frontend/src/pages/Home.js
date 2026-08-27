@@ -1,0 +1,223 @@
+import { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Marquee from "react-fast-marquee";
+import { Phone, Navigation, ArrowRight, Instagram, Megaphone } from "lucide-react";
+import { api } from "../lib/api";
+import { useSite } from "../context/SiteContext";
+import { events } from "../lib/analytics";
+import { Reveal, MaskedLines } from "../components/Reveal";
+import { MenuItemCard } from "../components/MenuItemCard";
+
+const manifesto = [
+  { num: "01", title: "ÜRÜN KALİTESİ", key: "quality_text" },
+  { num: "02", title: "VİZYON & MİSYON", key: "vision_text" },
+  { num: "03", title: "MÜŞTERİ MEMNUNİYETİ", text: "Kusursuz servis ilkemiz ile misafirlerimize unutamayacakları bir gün geçirmeleri için elimizden gelen en iyi hizmeti veriyoruz." },
+];
+
+export default function Home() {
+  const { settings, t } = useSite();
+  const [featured, setFeatured] = useState([]);
+  const [campaigns, setCampaigns] = useState([]);
+  const s = settings || {};
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "22%"]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+
+  useEffect(() => {
+    api.get("/featured").then((r) => setFeatured(r.data)).catch(() => {});
+    api.get("/campaigns").then((r) => setCampaigns(r.data)).catch(() => {});
+  }, []);
+
+  const phoneHref = s.phone ? `tel:${s.phone.replace(/[^\d+]/g, "")}` : "#";
+
+  return (
+    <div data-testid="home-page">
+      {/* HERO */}
+      <section ref={heroRef} className="relative min-h-screen flex items-end overflow-hidden">
+        <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.1 }}>
+          <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/60 to-[#030303]/30" />
+        </motion.div>
+
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pb-24 sm:pb-32 pt-40 w-full">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="eyebrow mb-6"
+            data-testid="hero-eyebrow"
+          >
+            {(s.tagline || "Bir cafeden daha fazlası").toUpperCase()}
+          </motion.p>
+
+          <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] tracking-tighter leading-[0.95] max-w-4xl" data-testid="hero-title">
+            <MaskedLines lines={["EFSANE LEZZET", "SİZLERLE."]} delay={0.25} />
+          </h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="text-base sm:text-lg text-white/60 max-w-xl mt-8 leading-relaxed"
+            data-testid="hero-subtitle"
+          >
+            {s.hero_subtitle}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="flex flex-wrap gap-4 mt-10"
+          >
+            <Link to="/menu" className="btn-pill btn-solid" onClick={() => events.menuView("hero")} data-testid="hero-menu-btn">
+              {t("viewMenu")} <ArrowRight size={16} />
+            </Link>
+            <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions} className="btn-pill btn-ghost" data-testid="hero-directions-btn">
+              <Navigation size={16} /> {t("directions")}
+            </a>
+            <a href={phoneHref} onClick={events.phoneCall} className="btn-pill btn-ghost" data-testid="hero-call-btn">
+              <Phone size={16} /> {t("callUs")}
+            </a>
+            {s.reservation_enabled && (
+              <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-gold/40 !text-gold hover:!border-gold" data-testid="hero-reservation-btn">
+                {t("makeReservation")}
+              </Link>
+            )}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* MARQUEE */}
+      <div className="py-10 border-y border-white/5 overflow-hidden" data-testid="editorial-marquee">
+        <Marquee speed={30} gradient={false} autoFill>
+          <span className="marquee-text mx-8">Kumpir · Burger · Kahve · Künefe · Waffle · Pizza ·</span>
+        </Marquee>
+      </div>
+
+      {/* CAMPAIGNS */}
+      {campaigns.length > 0 && (
+        <section className="max-w-7xl mx-auto px-5 sm:px-8 pt-16" data-testid="campaigns-section">
+          {campaigns.map((c) => (
+            <Reveal key={c.id} className="card-dark !border-gold/30 p-6 sm:p-8 flex items-start gap-4 mb-4">
+              <Megaphone className="text-gold shrink-0 mt-1" size={22} />
+              <div>
+                <h3 className="font-display font-bold text-xl">{c.title}</h3>
+                <p className="text-white/60 mt-2">{c.description}</p>
+              </div>
+            </Reveal>
+          ))}
+        </section>
+      )}
+
+      {/* FEATURED */}
+      <section className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32" data-testid="featured-section">
+        <Reveal>
+          <p className="eyebrow mb-4">Favoriler</p>
+          <div className="flex flex-wrap items-end justify-between gap-6 mb-12">
+            <h2 className="font-display font-black text-3xl sm:text-4xl lg:text-5xl tracking-tighter">
+              Öne Çıkan <span className="text-gold">Lezzetler</span>
+            </h2>
+            <Link to="/menu" className="font-display text-sm font-bold uppercase tracking-widest text-white/50 hover:text-gold transition-colors flex items-center gap-2" data-testid="featured-view-all">
+              Tüm Menü <ArrowRight size={15} />
+            </Link>
+          </div>
+        </Reveal>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {featured.map((item, i) => (
+            <Reveal key={item.id} delay={(i % 3) * 0.12}>
+              <Link to="/menu" onClick={() => events.menuView("featured")}>
+                <MenuItemCard item={item} />
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* MANIFESTO */}
+      <section className="border-t border-white/5 bg-[#050505]" data-testid="manifesto-section">
+        <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
+          <Reveal>
+            <p className="eyebrow mb-16">Neden Cafe Del Nord</p>
+          </Reveal>
+          <div className="space-y-20">
+            {manifesto.map((m, i) => (
+              <Reveal key={m.num} delay={0.1}>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                  <span className="font-serif-editorial italic text-6xl sm:text-7xl text-white/15 lg:col-span-2">{m.num}</span>
+                  <h3 className="font-display font-black text-2xl sm:text-3xl tracking-tight lg:col-span-4">{m.title}</h3>
+                  <p className="text-white/50 leading-relaxed text-base sm:text-lg lg:col-span-6 max-w-xl">
+                    {m.key ? s[m.key] : m.text}
+                  </p>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* COFFEE SPLIT */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 border-t border-white/5" data-testid="coffee-section">
+        <div className="img-frame !rounded-none aspect-[4/3] lg:aspect-auto lg:min-h-[560px]">
+          <img src="/images/kahve-atmosfer.jpg" alt="Taze çekilmiş kahve" loading="lazy" />
+        </div>
+        <div className="flex flex-col justify-center px-6 sm:px-14 py-16 lg:py-24">
+          <Reveal>
+            <p className="eyebrow mb-5">Kahve Ritüeli</p>
+            <h2 className="font-serif-editorial italic text-4xl sm:text-5xl lg:text-6xl mb-8">Kahve?</h2>
+            <p className="text-white/55 leading-relaxed max-w-md mb-10">
+              Yetiştirildiği bölgenin en kaliteli kahve çekirdeklerinden hazırladığımız kahve çeşitlerimizi denediğinizde,
+              damağınızda kalan yöresel lezzeti unutamayacaksınız.
+            </p>
+            <Link to="/menu" className="btn-pill btn-ghost w-fit" data-testid="coffee-menu-btn">
+              Kahve Menümüz <ArrowRight size={15} />
+            </Link>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* DESSERT SPLIT */}
+      <section className="grid grid-cols-1 lg:grid-cols-2 border-t border-white/5" data-testid="dessert-section">
+        <div className="flex flex-col justify-center px-6 sm:px-14 py-16 lg:py-24 order-2 lg:order-1">
+          <Reveal>
+            <p className="eyebrow mb-5">Tatlı Bir Mola</p>
+            <h2 className="font-serif-editorial italic text-4xl sm:text-5xl lg:text-6xl mb-8">Tatlılar</h2>
+            <p className="text-white/55 leading-relaxed max-w-md mb-10">
+              Geleneksel tatlılar, pastalar, waffle ve diğerleri. Tadına doyulmaz muhteşem lezzetler sizi bekliyor.
+            </p>
+            <Link to="/menu" className="btn-pill btn-ghost w-fit" data-testid="dessert-menu-btn">
+              Tatlı Menümüz <ArrowRight size={15} />
+            </Link>
+          </Reveal>
+        </div>
+        <div className="img-frame !rounded-none aspect-[4/3] lg:aspect-auto lg:min-h-[560px] order-1 lg:order-2">
+          <img src="/images/tatli-atmosfer.jpg" alt="Tatlı çeşitleri" loading="lazy" />
+        </div>
+      </section>
+
+      {/* INSTAGRAM CTA */}
+      <section className="border-t border-white/5" data-testid="instagram-section">
+        <div className="max-w-4xl mx-auto px-5 sm:px-8 py-24 text-center">
+          <Reveal>
+            <Instagram className="mx-auto text-gold mb-6" size={32} />
+            <h2 className="font-display font-black text-3xl sm:text-4xl tracking-tighter mb-4">
+              Bizi Instagram'da Takip Edin
+            </h2>
+            <p className="text-white/50 mb-8 max-w-md mx-auto">
+              En yeni lezzetlerimizi ve restoranımızdan kareleri kaçırmayın.
+            </p>
+            {s.instagram ? (
+              <a href={s.instagram} target="_blank" rel="noreferrer" onClick={events.instagramClick} className="btn-pill btn-solid" data-testid="instagram-follow-btn">
+                <Instagram size={16} /> Takip Et
+              </a>
+            ) : (
+              <p className="text-xs text-white/30 italic">Instagram hesabı admin panelinden eklenebilir.</p>
+            )}
+          </Reveal>
+        </div>
+      </section>
+    </div>
+  );
+}
