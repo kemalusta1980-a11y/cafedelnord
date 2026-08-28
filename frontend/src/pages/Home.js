@@ -10,13 +10,13 @@ import { Reveal, MaskedLines, GoldTitle } from "../components/Reveal";
 import { MenuItemCard } from "../components/MenuItemCard";
 
 const manifesto = [
-  { num: "01", title: "ÜRÜN KALİTESİ", key: "quality_text" },
-  { num: "02", title: "VİZYON & MİSYON", key: "vision_text" },
-  { num: "03", title: "MÜŞTERİ MEMNUNİYETİ", text: "Kusursuz servis ilkemiz ile misafirlerimize unutamayacakları bir gün geçirmeleri için elimizden gelen en iyi hizmeti veriyoruz." },
+  { num: "01", titleKey: "m1Title", stKey: "quality_text" },
+  { num: "02", titleKey: "m2Title", stKey: "vision_text" },
+  { num: "03", titleKey: "m3Title", tKey: "guestBody" },
 ];
 
 export default function Home() {
-  const { settings, t } = useSite();
+  const { settings, t, st } = useSite();
   const [featured, setFeatured] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const s = settings || {};
@@ -49,7 +49,7 @@ export default function Home() {
             className="eyebrow mb-6"
             data-testid="hero-eyebrow"
           >
-            {(s.tagline || "Bir cafeden daha fazlası").toUpperCase()}
+            {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
           </motion.p>
 
           <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] tracking-tighter leading-[0.95] max-w-4xl" data-testid="hero-title">
@@ -63,7 +63,7 @@ export default function Home() {
             className="text-base sm:text-lg text-white/60 max-w-xl mt-8 leading-relaxed"
             data-testid="hero-subtitle"
           >
-            {s.hero_subtitle}
+            {st("hero_subtitle")}
           </motion.p>
 
           <motion.div
@@ -147,9 +147,9 @@ export default function Home() {
               <Reveal key={m.num} delay={0.1}>
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                   <span className="font-serif-editorial italic text-6xl sm:text-7xl text-white/15 lg:col-span-2">{m.num}</span>
-                  <h3 className="font-display font-black text-2xl sm:text-3xl tracking-tight lg:col-span-4">{m.title}</h3>
+                  <h3 className="font-display font-black text-2xl sm:text-3xl tracking-tight lg:col-span-4">{t(m.titleKey)}</h3>
                   <p className="text-white/50 leading-relaxed text-base sm:text-lg lg:col-span-6 max-w-xl">
-                    {m.key ? s[m.key] : m.text}
+                    {m.stKey ? st(m.stKey) : t(m.tKey)}
                   </p>
                 </div>
               </Reveal>

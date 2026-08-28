@@ -4,7 +4,7 @@ import { useSite } from "../context/SiteContext";
 import { events } from "../lib/analytics";
 
 export const Footer = () => {
-  const { settings, t } = useSite();
+  const { settings, t, st } = useSite();
   const s = settings || {};
 
   return (
@@ -15,7 +15,7 @@ export const Footer = () => {
             CAFE <span className="text-gold">DEL NORD</span>
           </p>
           <p className="text-sm text-white/50 leading-relaxed mb-6">
-            {s.tagline ? s.tagline.charAt(0).toUpperCase() + s.tagline.slice(1) : "Bir cafeden daha fazlası"}.{" "}
+            {(st("tagline") || "Bir cafeden daha fazlası").replace(/^./, (c) => c.toUpperCase())}.{" "}
             {t("footerDesc")}
           </p>
           <div className="flex gap-3">

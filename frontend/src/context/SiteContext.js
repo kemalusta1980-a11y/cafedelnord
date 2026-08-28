@@ -28,11 +28,12 @@ export const SiteProvider = ({ children }) => {
   };
 
   const t = (key) => UI[lang][key] ?? UI.tr[key] ?? key;
+  const st = (key) => (settings ? (lang !== "tr" && settings[`${key}_${lang}`]) || settings[key] || "" : "");
   const localName = (item) => (lang !== "tr" && item[`name_${lang}`]) || item.name;
   const localDesc = (item) => (lang !== "tr" && item[`description_${lang}`]) || item.description;
 
   return (
-    <SiteContext.Provider value={{ settings, setSettings, lang, setLang, langs: LANGS, t, localName, localDesc }}>
+    <SiteContext.Provider value={{ settings, setSettings, lang, setLang, langs: LANGS, t, st, localName, localDesc }}>
       {children}
     </SiteContext.Provider>
   );

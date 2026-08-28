@@ -8,6 +8,11 @@ export const LANGS = [
 
 export const UI = {
   tr: {
+    m1Title: "ÜRÜN KALİTESİ", m2Title: "VİZYON & MİSYON", m3Title: "MÜŞTERİ MEMNUNİYETİ",
+    guestBody: "Kusursuz servis ilkemiz ile misafirlerimize unutamayacakları bir gün geçirmeleri için elimizden gelen en iyi hizmeti veriyoruz.",
+    ch1Title: "Atmosfer", ch1Body: "Sıcak, samimi ve modern bir ortamda; ister kahvenizi yudumlayın, ister sevdiklerinizle uzun sohbetlere dalın.",
+    ch2Title: "Yemek Anlayışımız", ch2Body: "Taş fırında pişen kumpirden el yapımı burgerlere, geleneksel tatlılardan taze çekilmiş kahveye — her ürün usta ellerde hazırlanır.",
+    ch3Title: "Kalite Anlayışımız", ch4Title: "Misafir Deneyimi",
     home: "Ana Sayfa", menu: "Menü", about: "Hakkımızda", gallery: "Galeri", contact: "İletişim", reservation: "Rezervasyon",
     viewMenu: "Menüyü İncele", directions: "Yol Tarifi Al", callUs: "Bizi Ara", makeReservation: "Rezervasyon Yap",
     heroLine1: "EFSANE LEZZET", heroLine2: "SİZLERLE.",
@@ -30,6 +35,11 @@ export const UI = {
     cookieText: "Deneyiminizi iyileştirmek için çerezler kullanıyoruz. Detaylar için", cookieLink: "Çerez Politikası", cookieText2: "sayfamıza göz atabilirsiniz.", accept: "Kabul Et", reject: "Reddet",
   },
   en: {
+    m1Title: "PRODUCT QUALITY", m2Title: "VISION & MISSION", m3Title: "GUEST SATISFACTION",
+    guestBody: "With our principle of flawless service, we do our very best so that our guests spend an unforgettable day with us.",
+    ch1Title: "Atmosphere", ch1Body: "In a warm, friendly and modern setting — sip your coffee or dive into long conversations with your loved ones.",
+    ch2Title: "Our Culinary Approach", ch2Body: "From stone-oven kumpir to handmade burgers, from traditional desserts to freshly ground coffee — every product is crafted by master hands.",
+    ch3Title: "Our Quality Standards", ch4Title: "Guest Experience",
     home: "Home", menu: "Menu", about: "About", gallery: "Gallery", contact: "Contact", reservation: "Reservation",
     viewMenu: "View Menu", directions: "Get Directions", callUs: "Call Us", makeReservation: "Book a Table",
     heroLine1: "LEGENDARY TASTE", heroLine2: "AWAITS YOU.",
@@ -52,6 +62,11 @@ export const UI = {
     cookieText: "We use cookies to improve your experience. For details, see our", cookieLink: "Cookie Policy", cookieText2: "page.", accept: "Accept", reject: "Reject",
   },
   de: {
+    m1Title: "PRODUKTQUALITÄT", m2Title: "VISION & MISSION", m3Title: "GÄSTEZUFRIEDENHEIT",
+    guestBody: "Nach unserem Prinzip des perfekten Service geben wir unser Bestes, damit unsere Gäste einen unvergesslichen Tag bei uns verbringen.",
+    ch1Title: "Atmosphäre", ch1Body: "In einem warmen, herzlichen und modernen Ambiente — genießen Sie Ihren Kaffee oder vertiefen Sie sich in lange Gespräche mit Ihren Liebsten.",
+    ch2Title: "Unsere Küchenphilosophie", ch2Body: "Vom Steinofen-Kumpir bis zum hausgemachten Burger, vom traditionellen Dessert bis zum frisch gemahlenen Kaffee — alles von Meisterhand.",
+    ch3Title: "Unser Qualitätsverständnis", ch4Title: "Gästeerlebnis",
     home: "Startseite", menu: "Speisekarte", about: "Über Uns", gallery: "Galerie", contact: "Kontakt", reservation: "Reservierung",
     viewMenu: "Speisekarte Ansehen", directions: "Route Planen", callUs: "Anrufen", makeReservation: "Tisch Reservieren",
     heroLine1: "LEGENDÄRER GESCHMACK", heroLine2: "ERWARTET SIE.",
@@ -74,6 +89,11 @@ export const UI = {
     cookieText: "Wir verwenden Cookies, um Ihr Erlebnis zu verbessern. Details finden Sie in unserer", cookieLink: "Cookie-Richtlinie", cookieText2: ".", accept: "Akzeptieren", reject: "Ablehnen",
   },
   ru: {
+    m1Title: "КАЧЕСТВО ПРОДУКТОВ", m2Title: "ВИДЕНИЕ И МИССИЯ", m3Title: "ДОВОЛЬНЫЕ ГОСТИ",
+    guestBody: "Следуя принципу безупречного сервиса, мы делаем всё возможное, чтобы наши гости провели у нас незабываемый день.",
+    ch1Title: "Атмосфера", ch1Body: "В тёплой, уютной и современной обстановке — наслаждайтесь кофе или погружайтесь в долгие беседы с близкими.",
+    ch2Title: "Наша Кухня", ch2Body: "От кумпира из каменной печи до домашних бургеров, от традиционных десертов до свежемолотого кофе — всё создаётся руками мастеров.",
+    ch3Title: "Наши Стандарты Качества", ch4Title: "Впечатления Гостей",
     home: "Главная", menu: "Меню", about: "О Нас", gallery: "Галерея", contact: "Контакты", reservation: "Бронирование",
     viewMenu: "Смотреть Меню", directions: "Проложить Маршрут", callUs: "Позвонить", makeReservation: "Забронировать Столик",
     heroLine1: "ЛЕГЕНДАРНЫЙ ВКУС", heroLine2: "ЖДЁТ ВАС.",
@@ -96,6 +116,11 @@ export const UI = {
     cookieText: "Мы используем cookie для улучшения вашего опыта. Подробнее — на странице", cookieLink: "Политика Cookie", cookieText2: ".", accept: "Принять", reject: "Отклонить",
   },
   ar: {
+    m1Title: "جودة المنتجات", m2Title: "الرؤية والرسالة", m3Title: "رضا الضيوف",
+    guestBody: "بمبدأ الخدمة المتقنة، نبذل قصارى جهدنا ليقضي ضيوفنا يوماً لا يُنسى معنا.",
+    ch1Title: "الأجواء", ch1Body: "في أجواء دافئة وودّية وعصرية — ارتشفوا قهوتكم أو انغمسوا في أحاديث طويلة مع أحبّائكم.",
+    ch2Title: "فلسفتنا في الطهي", ch2Body: "من الكومبير المخبوز في الفرن الحجري إلى البرغر المنزلي، ومن الحلويات التقليدية إلى القهوة المطحونة طازجاً — كل منتج يُصنع بأيدي الخبراء.",
+    ch3Title: "معاييرنا للجودة", ch4Title: "تجربة الضيوف",
     home: "الرئيسية", menu: "القائمة", about: "من نحن", gallery: "المعرض", contact: "اتصل بنا", reservation: "الحجز",
     viewMenu: "تصفح القائمة", directions: "احصل على الاتجاهات", callUs: "اتصل بنا", makeReservation: "احجز طاولة",
     heroLine1: "مذاق أسطوري", heroLine2: "بانتظاركم.",
