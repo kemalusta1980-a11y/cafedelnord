@@ -43,9 +43,10 @@ export default function Home() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="eyebrow mb-6"
+              className="eyebrow inline-flex items-center gap-2 border border-white/15 bg-white/5 rounded-full px-4 py-2 mb-7"
               data-testid="hero-eyebrow"
             >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#e63946]" />
               {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
             </motion.p>
 
