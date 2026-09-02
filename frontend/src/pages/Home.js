@@ -85,6 +85,20 @@ export default function Home() {
                 </Link>
               )}
             </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1.15 }}
+              className="flex flex-wrap gap-3 mt-12"
+              data-testid="hero-feature-strip"
+            >
+              {["m1Title", "m2Title", "m3Title"].map((k) => (
+                <span key={k} className="text-[0.62rem] font-display font-bold tracking-[0.22em] uppercase text-white/50 border border-white/10 bg-white/[0.03] rounded-full px-4 py-2">
+                  {t(k)}
+                </span>
+              ))}
+            </motion.div>
           </div>
 
           <motion.div
@@ -94,9 +108,28 @@ export default function Home() {
             className="relative mx-auto w-[78vw] max-w-[380px] lg:max-w-[520px] aspect-square"
             data-testid="hero-dish"
           >
+            <div className="hero-glow" />
             <div className="hero-ring" />
             <motion.div className="hero-dish w-full h-full" style={{ y: bgY }}>
               <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" fetchPriority="high" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1, duration: 0.6 }}
+              className="float-chip a"
+              data-testid="hero-float-kunefe"
+            >
+              <img src="/images/kunefe.jpg" alt="Künefe" loading="lazy" />
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1.2, duration: 0.6 }}
+              className="float-chip b"
+              data-testid="hero-float-latte"
+            >
+              <img src="/images/latte.jpg" alt="Latte" loading="lazy" />
             </motion.div>
           </motion.div>
         </motion.div>

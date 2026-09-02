@@ -95,7 +95,7 @@ body {
   font-weight: 400;
   font-size: clamp(4rem, 10vw, 9rem);
   line-height: 1;
-  color: rgba(255, 255, 255, 0.07);
+  color: rgba(196, 173, 255, 0.12);
   white-space: nowrap;
 }
 
@@ -110,7 +110,10 @@ h1.font-display, h2.font-display { font-family: "Cormorant Garamond", "Cabinet G
 
 .hero-dish { border-radius: 9999px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08); }
 .hero-dish img { width: 100%; height: 100%; object-fit: cover; }
-.hero-ring { position: absolute; inset: -14px; border: 1px dashed rgba(167,139,250,0.35); border-radius: 9999px; }
+.hero-ring { position: absolute; inset: -16px; border: 1px dashed rgba(167,139,250,0.45); border-radius: 9999px; animation: ring-spin 60s linear infinite; }
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+.hero-dish { transition: transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+.hero-dish:hover { transform: scale(1.03) rotate(1.5deg); }
 
 /* Category chip nav */
 .cat-chip {
@@ -146,3 +149,14 @@ html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Creative touches */
+@keyframes float-a { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+@keyframes float-b { 0%,100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
+@keyframes glow-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; } }
+.float-chip { position: absolute; border-radius: 9999px; overflow: hidden; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 16px 40px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+.float-chip img { width: 100%; height: 100%; object-fit: cover; }
+.float-chip.a { width: 96px; height: 96px; top: 2%; left: -8%; animation: float-a 6s ease-in-out infinite; }
+.float-chip.b { width: 76px; height: 76px; bottom: 6%; right: -6%; animation: float-b 7s ease-in-out infinite; }
+.hero-glow { position: absolute; inset: -12%; border-radius: 9999px; background: radial-gradient(circle, rgba(167,139,250,0.35) 0%, transparent 62%); animation: glow-pulse 5s ease-in-out infinite; pointer-events: none; }
+@media (max-width: 640px) { .float-chip.a { width: 68px; height: 68px; left: -2%; } .float-chip.b { width: 56px; height: 56px; right: -2%; } }
