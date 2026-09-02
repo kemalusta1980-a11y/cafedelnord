@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
+import json
 import time
 import logging
 import httpx
@@ -522,104 +523,53 @@ async def delete_campaign(camp_id: str, user=Depends(require_admin)):
 
 
 # ---------- Seed ----------
-SEED_CATEGORIES = [
-    {"name": "Ana Yemekler", "name_en": "Main Dishes", "slug": "ana-yemekler", "order": 0},
-    {"name": "Tatlılar", "name_en": "Desserts", "slug": "tatlilar", "order": 1},
-    {"name": "Soğuk İçecekler", "name_en": "Cold Drinks", "slug": "soguk-icecekler", "order": 2},
-    {"name": "Sıcak İçecekler", "name_en": "Hot Drinks", "slug": "sicak-icecekler", "order": 3},
-]
-
-SEED_ITEMS = {
-    "ana-yemekler": [
-        ("Kumpir", "Taş fırında pişmiş kumpirlik özel patates ile tereyağ ve kaşar peynirinin buluşması.", "/images/kumpir.jpg", True),
-        ("Et Burger", "Dana etinden hazırlanmış hamburger köftesi, patates kızartması.", "/images/et-burger.jpg", True),
-        ("Tavuk Burger", "Tavuk etinden hazırlanmış hamburger köftesi, patates kızartması.", "/images/tavuk-burger.jpg", False),
-        ("Karışık Izgara", "Dana bonfile, tavuk pirzola, kasap köfte, içli köfte, patates kızartması, pilav.", "/images/karisik-izgara.jpg", False),
-        ("Pizza Çeşitleri", "Karışık pizza, margarita pizza, kavurmalı pizza, tavuklu pizza.", "/images/pizza.jpg", True),
-        ("İçli Köfte", "Bulgurun hamur haline getirilerek içinin hazırlanmış kıyma ile doldurulması.", "/images/icli-kofte.jpg", False),
-        ("Çorba Çeşitleri", "Asırlık lezzet, özenle seçilen mercimeğin sebzelerle bütünleşmesi.", "/images/corba.jpg", False),
-        ("Patates Kızartması", "Kızartmalık patates yetiştirilen tarlalardan gelen patateslerin çıtır çıtır kızartılmış hali.", "/images/patates.jpg", False),
-        ("Tost Çeşitleri", "Kaşarlı, sucuklu ve karışık tost çeşitlerimiz.", "/images/nord-banner.jpg", False),
-        ("Sucuklu Yumurta", "Geleneksel kahvaltılarımızın vazgeçilmezi.", "/images/sucuklu-yumurta.jpg", False),
-        ("Salata Çeşitleri", "Taze sebzelerle hazırlanan salata çeşitlerimiz. Ton balıklı, beyaz peynirli, mevsim salata.", "/images/salata.jpg", False),
-        ("Serpme Kahvaltı", "Sıcacık çay eşliğinde çeşit çeşit ürünlerden oluşan tam bir serpme kahvaltı.", "/images/serpme.jpg", True),
-    ],
-    "tatlilar": [
-        ("Waffle", "Taze waffle hamuru, muhteşem waffle çikolatası, muz, çilek, kivi ve soslar.", "/images/waffle.jpg", True),
-        ("Künefe", "Taze künefe kadayıfı ve özel künefe peynirinin şerbetle buluşması.", "/images/kunefe.jpg", True),
-        ("Katmer", "İncecik açılarak hazırlanmış katmerlik yufkanın fıstık ile uyumu.", "/images/katmer.jpg", False),
-        ("Sufle", "Muhteşem sufle kekinin içindeki akıcı çikolatanın lezzetine bayılacaksınız.", "/images/sufle.jpg", False),
-        ("Sütlaç", "Geleneksel tatlımız sizler için özenle hazırlanır. Mutlaka denemelisiniz.", "/images/sutlac.jpg", False),
-        ("Trileçe", "Yumuşacık kekin sütle uyumu sonrasında karamel sosu ile taçlandırılması.", "/images/trilece.jpg", False),
-    ],
-    "soguk-icecekler": [
-        ("Milkshake Çeşitleri", "Süt ve meyvelerle hazırlanan serinleten lezzetler. Muz, kivi, çilek, kavun, çikolata.", "/images/milkshake.jpg", False),
-        ("Frozen Çeşitleri", "Buz ve meyve püresiyle hazırlanan serinleten lezzet. Kivi, çilek, kavun.", "/images/frozen.jpg", False),
-        ("Buzlu Kahve Çeşitleri", "Espresso ile hazırlanan klasik kahvelerin buzla hazırlanarak servis edilmesi.", "/images/buzlu-kahve.jpg", False),
-        ("Taze Meyve Suları", "Taze meyvelerden soğuk sıkım meyve suları. Portakal, elma, havuç suyu.", "/images/meyve-suyu-1.jpg", False),
-        ("Atom & Limonata", "Taze meyvelerden soğuk sıkım. Atom, nar suyu, limonata çeşitleri.", "/images/meyve-suyu-2.jpg", False),
-        ("Kutu İçecekler", "Serinleten kutu içecekler. Cola, Fanta, Sprite, Cappy, Fuse Tea ve çeşitleri.", "/images/kutu-icecek.jpg", False),
-    ],
-    "sicak-icecekler": [
-        ("Türk Kahvesi", "Özenle seçilmiş yöresel kahve çekirdeklerinin çekilerek hazırlanan geleneksel lezzet.", "/images/turk-kahvesi.jpg", True),
-        ("Espresso", "Özenle seçilmiş yöresel kahve çekirdeklerinin çekilerek hazırlanan keskin lezzet.", "/images/espresso.jpg", False),
-        ("Latte", "Süt ve yöresel kahve çekirdekleri ile hazırlanan espressonun buluşması.", "/images/latte.jpg", False),
-        ("Cappuccino", "Köpüklü süt ve yöresel kahve çekirdekleri ile hazırlanan espressonun buluşması.", "/images/cappuccino.jpg", False),
-        ("Americano", "Su ve kahve çekirdekleri ile hazırlanan double espressonun buluşması.", "/images/americano.jpg", False),
-        ("Filtre Kahve", "Damla demlemeli kağıt kahve filtresi ile hazırlanan muhteşem kahve deneyimi.", "/images/filtre-kahve.jpg", False),
-        ("Çay Çeşitleri", "Çeşit çeşit şifalı bitki çayları, ince belli bardakta geleneksel Türk çayı.", "/images/cay.jpg", False),
-        ("Salep", "Kaliteli salep ve tarçının birlikteliği soğuk kış günleri için sizleri bekliyor.", "/images/salep.jpg", False),
-        ("Sıcak Çikolata", "Süt ve kaliteli çikolatanın birlikteliği soğuk kış günleri için sizleri bekliyor.", "/images/sicak-cikolata.jpg", False),
-    ],
-}
-
-
-SEED_GALLERY = [
-    ("/images/kumpir.jpg", "Taş fırında kumpir", False),
-    ("/images/kahve-atmosfer.jpg", "Kahve atmosferi", True),
-    ("/images/et-burger.jpg", "Et burger", False),
-    ("/images/kunefe.jpg", "Künefe", False),
-    ("/images/serpme.jpg", "Serpme kahvaltı", True),
-    ("/images/waffle.jpg", "Waffle", False),
-    ("/images/pizza.jpg", "Pizza çeşitleri", False),
-    ("/images/tatli-atmosfer.jpg", "Tatlılar", True),
-    ("/images/latte.jpg", "Latte", False),
-    ("/images/karisik-izgara.jpg", "Karışık ızgara", False),
-    ("/images/milkshake.jpg", "Milkshake", False),
-    ("/images/turk-kahvesi.jpg", "Türk kahvesi", True),
-    ("/images/icecek-atmosfer.jpg", "Soğuk içecekler", False),
-    ("/images/katmer.jpg", "Katmer", False),
-    ("/images/burger-atmosfer.jpg", "Burger çeşitleri", False),
-    ("/images/sufle.jpg", "Sufle", False),
-]
+SEED_VERSION = 2
+SEED_FILE = ROOT_DIR / "seed_data.json"
 
 
 async def seed():
-    if await db.categories.count_documents({}) == 0:
-        for c in SEED_CATEGORIES:
-            cat = Category(**c)
-            await db.categories.insert_one(cat.model_dump())
-            for i, (name, desc, img, feat) in enumerate(SEED_ITEMS[cat.slug]):
-                item = MenuItem(category_id=cat.id, name=name, description=desc,
-                                image=img, order=i, featured=feat)
-                await db.menu_items.insert_one(item.model_dump())
-        logger.info("Menu seeded")
-    if await db.settings.count_documents({"id": "site"}) == 0:
-        s = Settings(
-            hero_subtitle="Özenle seçilmiş kumpirlik patateslerin, yöresel tereyağ ve kaşar peynirinin buluşması. Usta ellerde hazırlanan lezzetler.",
-            about_text="Birinci sınıf ürünlerle, usta şeflerin deneyimi ile hazırladığımız ürünlerimizi mutlaka denemelisiniz. Muhteşem lezzetlerimizi deneyimledikten sonra taze çekilmiş kahvelerimizle taçlandırmalısınız.",
-            quality_text="Ürünlerimizi hazırlarken kullandığımız hammaddeler onaylı birinci sınıf gıda ürünleridir. Hijyen kurallarına uymak ana prensibimizdir. Tarım Bakanlığı tarafından düzenli denetlenmekteyiz.",
-            vision_text="Cafe Del Nord ailesi olarak hizmet ve ürün kalitemizi en üst düzeyde tutmak asli görevimizdir. Bu ilkeyle hizmet sektöründe çalışmaya devam etmekteyiz.",
-            phone="0 (212) 809 27 62",
-            maps_url="https://www.google.com/maps/search/?api=1&query=Cafe+Del+Nord",
-        )
-        await db.settings.insert_one(s.model_dump())
-        logger.info("Settings seeded")
-    if await db.gallery.count_documents({}) == 0:
-        for i, (img, alt, tall) in enumerate(SEED_GALLERY):
-            photo = GalleryPhoto(image=img, alt=alt, tall=tall, order=i)
-            await db.gallery.insert_one(photo.model_dump())
-        logger.info("Gallery seeded")
+    try:
+        with open(SEED_FILE, encoding="utf-8") as f:
+            data = json.load(f)
+    except Exception as e:
+        logger.error(f"Seed file error: {e}")
+        return
+    meta = await db.meta.find_one({"id": "seed"}) or {}
+    if meta.get("version", 0) >= SEED_VERSION:
+        return
+    if data.get("settings"):
+        await db.settings.update_one({"id": "site"}, {"$set": dict(data["settings"])}, upsert=True)
+    cat_id_map = {}
+    for c in data.get("categories") or []:
+        c = dict(c)
+        seed_id = c.pop("id")
+        existing = await db.categories.find_one({"slug": c["slug"]})
+        if existing:
+            await db.categories.update_one({"slug": c["slug"]}, {"$set": c})
+            cat_id_map[seed_id] = existing["id"]
+        else:
+            c["id"] = seed_id
+            await db.categories.insert_one(c)
+            cat_id_map[seed_id] = seed_id
+    for it in data.get("menu_items") or []:
+        it = dict(it)
+        it.pop("id", None)
+        it["category_id"] = cat_id_map.get(it["category_id"], it["category_id"])
+        if await db.menu_items.find_one({"name": it["name"]}):
+            await db.menu_items.update_one({"name": it["name"]}, {"$set": it})
+        else:
+            it["id"] = str(uuid.uuid4())
+            await db.menu_items.insert_one(it)
+    for g in data.get("gallery") or []:
+        g = dict(g)
+        g.pop("id", None)
+        if await db.gallery.find_one({"image": g["image"]}):
+            await db.gallery.update_one({"image": g["image"]}, {"$set": g})
+        else:
+            g["id"] = str(uuid.uuid4())
+            await db.gallery.insert_one(g)
+    await db.meta.update_one({"id": "seed"}, {"$set": {"version": SEED_VERSION}}, upsert=True)
+    logger.info(f"Seeded content v{SEED_VERSION} (non-destructive upsert)")
 
 
 app.include_router(api_router)
