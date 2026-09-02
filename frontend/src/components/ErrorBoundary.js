@@ -16,7 +16,7 @@ export class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="min-h-screen flex flex-col items-center justify-center gap-5 bg-[#170f2e] text-white px-6 text-center" data-testid="error-boundary">
+        <div className="min-h-screen flex flex-col items-center justify-center gap-5 bg-[#030303] text-white px-6 text-center" data-testid="error-boundary">
           <p className="font-display font-black text-2xl">
             CAFE <span className="text-gold">DEL NORD</span>
           </p>

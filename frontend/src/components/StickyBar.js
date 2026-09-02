@@ -10,7 +10,7 @@ export const StickyBar = () => {
   const s = settings || {};
 
   return (
-    <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 backdrop-blur-xl bg-[#170f2e]/85 border-t border-white/10" data-testid="mobile-sticky-bar">
+    <div className="lg:hidden fixed bottom-0 inset-x-0 z-50 backdrop-blur-xl bg-[#030303]/85 border-t border-white/10" data-testid="mobile-sticky-bar">
       <div className="grid grid-cols-3">
         <Link to="/menu" className="flex flex-col items-center gap-1 py-3 text-white/70 active:text-gold" data-testid="sticky-menu-btn">
           <UtensilsCrossed size={19} />

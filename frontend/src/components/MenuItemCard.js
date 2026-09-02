@@ -8,6 +8,11 @@ export const MenuItemCard = ({ item, large = false }) => {
       {item.image && (
         <div className={`img-frame !rounded-b-none ${large ? "aspect-[4/3]" : "aspect-[4/3]"}`}>
           <img src={item.image} alt={localName(item)} loading="lazy" />
+          {item.price != null && (
+            <span className="absolute top-3 right-3 backdrop-blur-md bg-black/60 border border-white/15 rounded-full px-3 py-1 font-display font-bold text-sm text-gold">
+              {item.price} ₺
+            </span>
+          )}
         </div>
       )}
       <div className="p-5">

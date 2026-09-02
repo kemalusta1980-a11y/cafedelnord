@@ -40,9 +40,9 @@ export const AdminReservations = () => {
                   className="bg-white/5 border border-white/10 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none"
                   data-testid={`reservation-status-select-${r.id}`}
                 >
-                  <option value="new" className="bg-[#251a4a]">Yeni</option>
-                  <option value="confirmed" className="bg-[#251a4a]">Onayla</option>
-                  <option value="cancelled" className="bg-[#251a4a]">İptal Et</option>
+                  <option value="new" className="bg-[#0d0d0d]">Yeni</option>
+                  <option value="confirmed" className="bg-[#0d0d0d]">Onayla</option>
+                  <option value="cancelled" className="bg-[#0d0d0d]">İptal Et</option>
                 </select>
               </div>
             </div>

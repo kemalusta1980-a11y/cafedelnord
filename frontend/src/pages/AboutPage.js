@@ -44,7 +44,7 @@ export default function AboutPage() {
           ))}
         </div>
 
-        <Reveal className="mt-24 border border-white/10 rounded-3xl p-10 sm:p-16 text-center bg-[#221645]">
+        <Reveal className="mt-24 border border-white/10 rounded-3xl p-10 sm:p-16 text-center bg-[#0a0a0a]">
           <p className="font-serif-editorial italic text-2xl sm:text-3xl text-white/80 max-w-3xl mx-auto leading-relaxed" data-testid="about-vision">
             “{st("vision_text")}”
           </p>

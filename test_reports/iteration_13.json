@@ -1,0 +1,33 @@
+{
+  "summary": "Frontend-only regression after rollback to gold/black theme (Sep 2 12:20 state). Verified all 11 visitor flows end-to-end on Desktop 1920 and Mobile 390. No runtime errors, no ErrorBoundary trigger, no black-screen, no 'destroy is not a function'. Console error count = 0 across all navigations.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "verified_flows": {
+    "home": "Loads. Hero 'EFSANE LEZZET / SİZLERLE.' visible. Gold accent + black theme rendering correctly.",
+    "menu": "33 items via [data-testid^=menu-item-]. 4 categories (cat-chip-ana-yemekler, tatlilar, soguk-icecekler, sicak-icecekler). Category filter works — Tatlılar returns 6 items. No ₺ symbol / no price anywhere.",
+    "gallery": "16/16 images loaded (naturalWidth>0). No broken visuals.",
+    "contact": "Phone 0 (212) 809 27 62 present, email destek@cafedelnord.com.tr present, address contains 'Venezia' (Venezia Mega Outlet), map link (goo.gl/maps) present, working hours visible.",
+    "about": "Loads cleanly, no error boundary.",
+    "language_switcher": "TR/EN/DE/RU/AR all switch correctly. Hero h1 verified: EN='LEGENDARY TASTE AWAITS YOU.', DE='LEGENDÄRER GESCHMACK ERWARTET SIE.', RU='ЛЕГЕНДАРНЫЙ ВКУС ЖДЁТ ВАС.', AR='مذاق أسطوري بانتظاركم.'. AR sets document.documentElement.dir='rtl'.",
+    "whatsapp_fab": "Right-bottom FAB present with href=https://wa.me/905342878402?text=Merhaba%2C%20bilgi%20almak%20istiyorum.",
+    "navbar_mobile": "Mobile 390px: no horizontal overflow (scrollWidth=390). Hamburger [data-testid=mobile-menu-toggle] present + aria-label='Menü'. Sticky bottom bar (Menü/Ara/Yol Tarifi) present.",
+    "reservation_hidden": "No 'Rezervasyon' text on home; no reservation CTA/form (reservation_enabled=false honored).",
+    "cookie_consent": "Banner [data-testid=cookie-banner] shown on first visit. Kabul Et button dismisses it. Persists across reload (localStorage) — banner NOT shown after reload.",
+    "console_errors": "0 page errors, 0 console errors across Home/Menu/Gallery/Contact/About and all language switches."
+  },
+  "test_report_links": [],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "Prior iteration_12 notes still stand as non-blocking cleanup: Home.js still uses lowercase `fetchpriority` (should be camelCase `fetchPriority` to silence React DOM warning), and MenuItemCard.js line 14 has invalid Tailwind class `font-800` — both purely cosmetic, no runtime impact."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A (skipped per request)", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Post-rollback regression (iteration 13) passes fully. Gold/black theme restored. All 11 test cases from review_request confirmed. Key testids: lang-toggle + lang-option-{tr,en,de,ru,ar}, cookie-banner + cookie-accept-btn, cat-chip-{slug}, menu-item-{uuid}, mobile-menu-toggle, mobile-sticky-bar, nav-link-{home,menu,about,gallery,contact}. No further main-agent action required."
+}

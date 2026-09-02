@@ -1,11 +1,11 @@
 /* CAFE DEL NORD — design system */
 :root {
-  --bg: #170f2e;
-  --surface: #251a4a;
+  --bg: #030303;
+  --surface: #0d0d0d;
   --text: #fafafa;
   --text-2: #a1a1a1;
   --muted: #525252;
-  --gold: #a78bfa;
+  --gold: #d4af37;
   --warm: #e55b3c;
   --line: rgba(255, 255, 255, 0.1);
 }
@@ -14,7 +14,7 @@ html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 
 body {
-  background: linear-gradient(165deg, #6d4bc4 0%, #4a2f96 22%, #2a1b5e 48%, #170f2e 100%) fixed;
+  background: var(--bg);
   color: var(--text);
   font-family: "Manrope", sans-serif;
 }
@@ -22,7 +22,7 @@ body {
 .font-display { font-family: "Cabinet Grotesk", "Manrope", sans-serif; }
 .font-serif-editorial { font-family: "Cormorant Garamond", serif; }
 
-::selection { background: var(--gold); color: #fff; }
+::selection { background: var(--gold); color: #030303; }
 
 .text-gold { color: var(--gold); }
 .bg-gold { background-color: var(--gold); }
@@ -46,8 +46,8 @@ body {
   cursor: pointer;
 }
 .btn-pill:active { transform: scale(0.97); }
-.btn-solid { background: var(--gold); color: #fff; border: 1px solid var(--gold); box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35); }
-.btn-solid:hover { background: #b9a2fb; border-color: #b9a2fb; }
+.btn-solid { background: var(--gold); color: #030303; border: 1px solid var(--gold); }
+.btn-solid:hover { background: #e8c65a; border-color: #e8c65a; }
 .btn-ghost { background: transparent; color: var(--text); border: 1px solid rgba(255, 255, 255, 0.25); }
 .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
 
@@ -66,7 +66,7 @@ body {
   border-radius: 1.25rem;
   transition: border-color 0.4s ease, transform 0.4s ease;
 }
-.card-dark:hover { border-color: rgba(167, 139, 250, 0.45); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.5); }
+.card-dark:hover { border-color: rgba(212, 175, 55, 0.4); transform: translateY(-4px); }
 
 /* Grain overlay */
 .grain::after {
@@ -95,25 +95,15 @@ body {
   font-weight: 400;
   font-size: clamp(4rem, 10vw, 9rem);
   line-height: 1;
-  color: rgba(196, 173, 255, 0.12);
+  color: rgba(255, 255, 255, 0.07);
   white-space: nowrap;
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 10px; }
-::-webkit-scrollbar-track { background: #170f2e; }
+::-webkit-scrollbar-track { background: #030303; }
 ::-webkit-scrollbar-thumb { background: #262626; border-radius: 6px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
-
-/* Premium serif for large headings (sans stays for nav/buttons) */
-h1.font-display, h2.font-display { font-family: "Cormorant Garamond", "Cabinet Grotesk", serif; font-weight: 600; letter-spacing: -0.01em; }
-
-.hero-dish { border-radius: 9999px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08); }
-.hero-dish img { width: 100%; height: 100%; object-fit: cover; }
-.hero-ring { position: absolute; inset: -16px; border: 1px dashed rgba(167,139,250,0.45); border-radius: 9999px; animation: ring-spin 60s linear infinite; }
-@keyframes ring-spin { to { transform: rotate(360deg); } }
-.hero-dish { transition: transform 0.8s cubic-bezier(0.22,1,0.36,1); }
-.hero-dish:hover { transform: scale(1.03) rotate(1.5deg); }
 
 /* Category chip nav */
 .cat-chip {
@@ -132,7 +122,7 @@ h1.font-display, h2.font-display { font-family: "Cormorant Garamond", "Cabinet G
   cursor: pointer;
 }
 .cat-chip:hover { color: var(--text); border-color: rgba(255, 255, 255, 0.3); }
-.cat-chip.active { background: var(--gold); border-color: var(--gold); color: #fff; }
+.cat-chip.active { background: var(--gold); border-color: var(--gold); color: #030303; }
 
 /* Arabic (RTL): letter-spacing breaks Arabic ligatures */
 html[dir="rtl"] .font-display,
@@ -149,14 +139,3 @@ html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 {
     transition-duration: 0.01ms !important;
   }
 }
-
-/* Creative touches */
-@keyframes float-a { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-@keyframes float-b { 0%,100% { transform: translateY(0); } 50% { transform: translateY(12px); } }
-@keyframes glow-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 0.9; } }
-.float-chip { position: absolute; border-radius: 9999px; overflow: hidden; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 16px 40px rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
-.float-chip img { width: 100%; height: 100%; object-fit: cover; }
-.float-chip.a { width: 96px; height: 96px; top: 2%; left: -8%; animation: float-a 6s ease-in-out infinite; }
-.float-chip.b { width: 76px; height: 76px; bottom: 6%; right: -6%; animation: float-b 7s ease-in-out infinite; }
-.hero-glow { position: absolute; inset: -12%; border-radius: 9999px; background: radial-gradient(circle, rgba(167,139,250,0.35) 0%, transparent 62%); animation: glow-pulse 5s ease-in-out infinite; pointer-events: none; }
-@media (max-width: 640px) { .float-chip.a { width: 68px; height: 68px; left: -2%; } .float-chip.b { width: 56px; height: 56px; right: -2%; } }

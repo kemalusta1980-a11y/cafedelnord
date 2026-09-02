@@ -34,7 +34,7 @@ const LangMenu = ({ mobile = false }) => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 6 }}
             transition={{ duration: 0.2 }}
-            className={`absolute z-50 min-w-[9.5rem] backdrop-blur-xl bg-[#251a4a]/95 border border-white/15 rounded-xl overflow-hidden shadow-2xl ${
+            className={`absolute z-50 min-w-[9.5rem] backdrop-blur-xl bg-[#0d0d0d]/95 border border-white/15 rounded-xl overflow-hidden shadow-2xl ${
               mobile ? "bottom-full mb-2 left-0" : "top-full mt-2 right-0"
             }`}
             data-testid="lang-menu"
@@ -78,7 +78,7 @@ export const Navbar = () => {
   return (
     <header
       className={`fixed top-0 inset-x-0 z-50 transition-all duration-500 ${
-        scrolled ? "backdrop-blur-xl bg-[#170f2e]/80 border-b border-white/10" : "bg-transparent"
+        scrolled ? "backdrop-blur-xl bg-[#030303]/80 border-b border-white/10" : "bg-transparent"
       }`}
       data-testid="site-header"
     >
@@ -125,7 +125,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="lg:hidden backdrop-blur-xl bg-[#170f2e]/95 border-b border-white/10 overflow-hidden"
+            className="lg:hidden backdrop-blur-xl bg-[#030303]/95 border-b border-white/10 overflow-hidden"
             data-testid="mobile-menu"
           >
             <div className="px-6 py-6 flex flex-col gap-5">

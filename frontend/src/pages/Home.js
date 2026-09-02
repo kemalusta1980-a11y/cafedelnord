@@ -34,103 +34,58 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO — split layout: text left, circular dish right */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-[#a78bfa]/15 blur-[140px] pointer-events-none" />
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full pt-28 pb-20 sm:pt-36 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-          <div>
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="eyebrow inline-flex items-center gap-2 border border-white/15 bg-white/5 rounded-full px-4 py-2 mb-7"
-              data-testid="hero-eyebrow"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#a78bfa]" />
-              {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
-            </motion.p>
+      {/* HERO */}
+      <section ref={heroRef} className="relative min-h-screen flex items-end overflow-hidden">
+        <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.1 }}>
+          <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/60 to-[#030303]/30" />
+        </motion.div>
 
-            <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5rem] tracking-tighter leading-[1.02]" data-testid="hero-title">
-              <MaskedLines key={t("heroLine1")} lines={[t("heroLine1"), t("heroLine2")]} delay={0.25} />
-            </h1>
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pb-24 sm:pb-32 pt-40 w-full">
+          <motion.p
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.1 }}
+            className="eyebrow mb-6"
+            data-testid="hero-eyebrow"
+          >
+            {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
+          </motion.p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="text-base sm:text-lg text-white/60 max-w-xl mt-7 leading-relaxed"
-              data-testid="hero-subtitle"
-            >
-              {st("hero_subtitle")}
-            </motion.p>
+          <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] tracking-tighter leading-[0.95] max-w-4xl" data-testid="hero-title">
+            <MaskedLines key={t("heroLine1")} lines={[t("heroLine1"), t("heroLine2")]} delay={0.25} />
+          </h1>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex flex-wrap gap-4 mt-10"
-            >
-              <Link to="/menu" className="btn-pill btn-solid" onClick={() => events.menuView("hero")} data-testid="hero-menu-btn">
-                {t("viewMenu")} <ArrowRight size={16} />
-              </Link>
-              <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions} className="btn-pill btn-ghost" data-testid="hero-directions-btn">
-                <Navigation size={16} /> {t("directions")}
-              </a>
-              <a href={phoneHref} onClick={events.phoneCall} className="btn-pill btn-ghost" data-testid="hero-call-btn">
-                <Phone size={16} /> {t("callUs")}
-              </a>
-              {s.reservation_enabled && (
-                <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-[#a78bfa]/50 !text-[#a78bfa] hover:!border-[#a78bfa]" data-testid="hero-reservation-btn">
-                  {t("makeReservation")}
-                </Link>
-              )}
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1.15 }}
-              className="flex flex-wrap gap-3 mt-12"
-              data-testid="hero-feature-strip"
-            >
-              {["m1Title", "m2Title", "m3Title"].map((k) => (
-                <span key={k} className="text-[0.62rem] font-display font-bold tracking-[0.22em] uppercase text-white/50 border border-white/10 bg-white/[0.03] rounded-full px-4 py-2">
-                  {t(k)}
-                </span>
-              ))}
-            </motion.div>
-          </div>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.7 }}
+            className="text-base sm:text-lg text-white/60 max-w-xl mt-8 leading-relaxed"
+            data-testid="hero-subtitle"
+          >
+            {st("hero_subtitle")}
+          </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.88 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto w-[78vw] max-w-[380px] lg:max-w-[520px] aspect-square"
-            data-testid="hero-dish"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.9 }}
+            className="flex flex-wrap gap-4 mt-10"
           >
-            <div className="hero-glow" />
-            <div className="hero-ring" />
-            <motion.div className="hero-dish w-full h-full" style={{ y: bgY }}>
-              <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" fetchPriority="high" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1, duration: 0.6 }}
-              className="float-chip a"
-              data-testid="hero-float-kunefe"
-            >
-              <img src="/images/kunefe.jpg" alt="Künefe" loading="lazy" />
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.5 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 1.2, duration: 0.6 }}
-              className="float-chip b"
-              data-testid="hero-float-latte"
-            >
-              <img src="/images/latte.jpg" alt="Latte" loading="lazy" />
-            </motion.div>
+            <Link to="/menu" className="btn-pill btn-solid" onClick={() => events.menuView("hero")} data-testid="hero-menu-btn">
+              {t("viewMenu")} <ArrowRight size={16} />
+            </Link>
+            <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions} className="btn-pill btn-ghost" data-testid="hero-directions-btn">
+              <Navigation size={16} /> {t("directions")}
+            </a>
+            <a href={phoneHref} onClick={events.phoneCall} className="btn-pill btn-ghost" data-testid="hero-call-btn">
+              <Phone size={16} /> {t("callUs")}
+            </a>
+            {s.reservation_enabled && (
+              <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-gold/40 !text-gold hover:!border-gold" data-testid="hero-reservation-btn">
+                {t("makeReservation")}
+              </Link>
+            )}
           </motion.div>
         </motion.div>
       </section>
@@ -182,7 +137,7 @@ export default function Home() {
       </section>
 
       {/* MANIFESTO */}
-      <section className="border-t border-white/5 bg-[#1b1236]" data-testid="manifesto-section">
+      <section className="border-t border-white/5 bg-[#050505]" data-testid="manifesto-section">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
           <Reveal>
             <p className="eyebrow mb-16">{t("whyUs")}</p>
