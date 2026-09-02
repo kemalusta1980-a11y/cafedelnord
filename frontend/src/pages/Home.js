@@ -34,58 +34,69 @@ export default function Home() {
 
   return (
     <div data-testid="home-page">
-      {/* HERO */}
-      <section ref={heroRef} className="relative min-h-screen flex items-end overflow-hidden">
-        <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.1 }}>
-          <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/60 to-[#030303]/30" />
-        </motion.div>
+      {/* HERO — split layout: text left, circular dish right */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-[#0c0c0c] via-[#050505] to-[#030303]">
+        <div className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-[#e63946]/10 blur-[140px] pointer-events-none" />
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full pt-28 pb-20 sm:pt-36 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+          <div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.1 }}
+              className="eyebrow mb-6"
+              data-testid="hero-eyebrow"
+            >
+              {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
+            </motion.p>
 
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 pb-24 sm:pb-32 pt-40 w-full">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="eyebrow mb-6"
-            data-testid="hero-eyebrow"
-          >
-            {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
-          </motion.p>
+            <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5rem] tracking-tighter leading-[1.02]" data-testid="hero-title">
+              <MaskedLines key={t("heroLine1")} lines={[t("heroLine1"), t("heroLine2")]} delay={0.25} />
+            </h1>
 
-          <h1 className="font-display font-black text-4xl sm:text-5xl lg:text-6xl xl:text-[5.5rem] tracking-tighter leading-[0.95] max-w-4xl" data-testid="hero-title">
-            <MaskedLines key={t("heroLine1")} lines={[t("heroLine1"), t("heroLine2")]} delay={0.25} />
-          </h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              className="text-base sm:text-lg text-white/60 max-w-xl mt-7 leading-relaxed"
+              data-testid="hero-subtitle"
+            >
+              {st("hero_subtitle")}
+            </motion.p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.7 }}
-            className="text-base sm:text-lg text-white/60 max-w-xl mt-8 leading-relaxed"
-            data-testid="hero-subtitle"
-          >
-            {st("hero_subtitle")}
-          </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              className="flex flex-wrap gap-4 mt-10"
+            >
+              <Link to="/menu" className="btn-pill btn-solid" onClick={() => events.menuView("hero")} data-testid="hero-menu-btn">
+                {t("viewMenu")} <ArrowRight size={16} />
+              </Link>
+              <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions} className="btn-pill btn-ghost" data-testid="hero-directions-btn">
+                <Navigation size={16} /> {t("directions")}
+              </a>
+              <a href={phoneHref} onClick={events.phoneCall} className="btn-pill btn-ghost" data-testid="hero-call-btn">
+                <Phone size={16} /> {t("callUs")}
+              </a>
+              {s.reservation_enabled && (
+                <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-[#e63946]/50 !text-[#e63946] hover:!border-[#e63946]" data-testid="hero-reservation-btn">
+                  {t("makeReservation")}
+                </Link>
+              )}
+            </motion.div>
+          </div>
 
           <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.9 }}
-            className="flex flex-wrap gap-4 mt-10"
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="relative mx-auto w-[78vw] max-w-[380px] lg:max-w-[520px] aspect-square"
+            data-testid="hero-dish"
           >
-            <Link to="/menu" className="btn-pill btn-solid" onClick={() => events.menuView("hero")} data-testid="hero-menu-btn">
-              {t("viewMenu")} <ArrowRight size={16} />
-            </Link>
-            <a href={s.maps_url || "#"} target="_blank" rel="noreferrer" onClick={events.directions} className="btn-pill btn-ghost" data-testid="hero-directions-btn">
-              <Navigation size={16} /> {t("directions")}
-            </a>
-            <a href={phoneHref} onClick={events.phoneCall} className="btn-pill btn-ghost" data-testid="hero-call-btn">
-              <Phone size={16} /> {t("callUs")}
-            </a>
-            {s.reservation_enabled && (
-              <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-gold/40 !text-gold hover:!border-gold" data-testid="hero-reservation-btn">
-                {t("makeReservation")}
-              </Link>
-            )}
+            <div className="hero-ring" />
+            <motion.div className="hero-dish w-full h-full" style={{ y: bgY }}>
+              <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" fetchPriority="high" />
+            </motion.div>
           </motion.div>
         </motion.div>
       </section>
