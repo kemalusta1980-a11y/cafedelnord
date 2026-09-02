@@ -31,7 +31,7 @@ export default function AuthCallback() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#030303]" data-testid="auth-callback">
+    <div className="min-h-screen flex items-center justify-center bg-[#170f2e]" data-testid="auth-callback">
       <p className="text-white/50 font-display tracking-widest uppercase text-sm animate-pulse">Giriş yapılıyor...</p>
     </div>
   );

@@ -84,7 +84,7 @@ function App() {
   }, []);
 
   return (
-    <div className="grain min-h-screen bg-[#030303] text-white">
+    <div className="grain min-h-screen text-white">
       <ErrorBoundary>
         <BrowserRouter>
           <SiteProvider>

@@ -8,7 +8,7 @@ export const Footer = () => {
   const s = settings || {};
 
   return (
-    <footer className="border-t border-white/10 bg-[#050505] pb-24 lg:pb-0" data-testid="site-footer">
+    <footer className="border-t border-white/10 bg-[#1b1236] pb-24 lg:pb-0" data-testid="site-footer">
       <div className="max-w-7xl mx-auto px-5 sm:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
         <div>
           <p className="font-display font-black text-2xl mb-4">

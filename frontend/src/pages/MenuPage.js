@@ -43,7 +43,7 @@ export default function MenuPage() {
       </div>
 
       {/* Sticky category nav + search */}
-      <div className="sticky top-16 sm:top-20 z-40 backdrop-blur-xl bg-[#030303]/85 border-y border-white/10 py-3" data-testid="menu-sticky-nav">
+      <div className="sticky top-16 sm:top-20 z-40 backdrop-blur-xl bg-[#170f2e]/85 border-y border-white/10 py-3" data-testid="menu-sticky-nav">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 flex items-center gap-3">
           <div className="flex gap-2 overflow-x-auto pb-1 flex-1 [scrollbar-width:none]">
             <button className={`cat-chip ${active === "all" ? "active" : ""}`} onClick={() => setActive("all")} data-testid="cat-chip-all">

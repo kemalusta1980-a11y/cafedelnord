@@ -77,7 +77,7 @@ export const AdminItems = () => {
             <div>
               <label className="text-xs text-white/50 block mb-1">Kategori</label>
               <select value={editing.category_id} onChange={set("category_id")} className={inputCls} data-testid="item-category-select">
-                {menu.map((c) => <option key={c.id} value={c.id} className="bg-[#0d0d0d]">{c.name}</option>)}
+                {menu.map((c) => <option key={c.id} value={c.id} className="bg-[#251a4a]">{c.name}</option>)}
               </select>
             </div>
             <div>

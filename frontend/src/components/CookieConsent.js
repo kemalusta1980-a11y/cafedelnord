@@ -22,7 +22,7 @@ export const CookieConsent = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 40 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:max-w-md z-[60] backdrop-blur-xl bg-[#0d0d0d]/95 border border-white/15 rounded-2xl p-5 shadow-2xl"
+          className="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-6 lg:max-w-md z-[60] backdrop-blur-xl bg-[#251a4a]/95 border border-white/15 rounded-2xl p-5 shadow-2xl"
           data-testid="cookie-banner"
         >
           <div className="flex items-start gap-3">

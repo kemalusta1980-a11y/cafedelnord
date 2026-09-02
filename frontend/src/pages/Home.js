@@ -35,8 +35,8 @@ export default function Home() {
   return (
     <div data-testid="home-page">
       {/* HERO — split layout: text left, circular dish right */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-b from-[#0c0c0c] via-[#050505] to-[#030303]">
-        <div className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-[#e63946]/10 blur-[140px] pointer-events-none" />
+      <section ref={heroRef} className="relative min-h-screen flex items-center overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-[560px] h-[560px] rounded-full bg-[#a78bfa]/15 blur-[140px] pointer-events-none" />
         <motion.div style={{ opacity: heroOpacity }} className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full pt-28 pb-20 sm:pt-36 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
           <div>
             <motion.p
@@ -46,7 +46,7 @@ export default function Home() {
               className="eyebrow inline-flex items-center gap-2 border border-white/15 bg-white/5 rounded-full px-4 py-2 mb-7"
               data-testid="hero-eyebrow"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#e63946]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-[#a78bfa]" />
               {(st("tagline") || "Bir cafeden daha fazlası").toUpperCase()}
             </motion.p>
 
@@ -80,7 +80,7 @@ export default function Home() {
                 <Phone size={16} /> {t("callUs")}
               </a>
               {s.reservation_enabled && (
-                <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-[#e63946]/50 !text-[#e63946] hover:!border-[#e63946]" data-testid="hero-reservation-btn">
+                <Link to="/rezervasyon" onClick={events.reservationClick} className="btn-pill btn-ghost !border-[#a78bfa]/50 !text-[#a78bfa] hover:!border-[#a78bfa]" data-testid="hero-reservation-btn">
                   {t("makeReservation")}
                 </Link>
               )}
@@ -149,7 +149,7 @@ export default function Home() {
       </section>
 
       {/* MANIFESTO */}
-      <section className="border-t border-white/5 bg-[#050505]" data-testid="manifesto-section">
+      <section className="border-t border-white/5 bg-[#1b1236]" data-testid="manifesto-section">
         <div className="max-w-7xl mx-auto px-5 sm:px-8 py-24 sm:py-32">
           <Reveal>
             <p className="eyebrow mb-16">{t("whyUs")}</p>
