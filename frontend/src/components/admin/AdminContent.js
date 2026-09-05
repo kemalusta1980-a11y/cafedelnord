@@ -77,6 +77,15 @@ const GROUPS = [
     title: "Alt Bilgi (Footer)",
     fields: [["footerDesc", "Footer Açıklama Metni", "textarea"]],
   },
+  {
+    title: "Yasal Sayfalar",
+    fields: [
+      ["legal_privacy", "Gizlilik Politikası Metni", "bigtext"],
+      ["legal_kvkk", "KVKK Aydınlatma Metni", "bigtext"],
+      ["legal_cookies", "Çerez Politikası Metni", "bigtext"],
+    ],
+    note: "Boş bırakılan yasal metinler sitede placeholder uyarısıyla gösterilir. Paragraflar boş satırla ayrılır.",
+  },
 ];
 
 const ImageField = ({ value, fallback, onChange }) => {
@@ -167,8 +176,8 @@ export const AdminContent = () => {
               <label className="text-xs text-white/50 block mb-1">{label}</label>
               {type === "image" ? (
                 <ImageField value={form[key]} fallback={fallback} onChange={setKey(key)} />
-              ) : type === "textarea" ? (
-                <textarea value={val(key, type)} onChange={(e) => setKey(key)(e.target.value)} rows={3} className={inputCls} data-testid={`content-${key}-input`} />
+              ) : type === "textarea" || type === "bigtext" ? (
+                <textarea value={val(key, type)} onChange={(e) => setKey(key)(e.target.value)} rows={type === "bigtext" ? 10 : 3} className={inputCls} data-testid={`content-${key}-input`} />
               ) : (
                 <input value={val(key, type)} onChange={(e) => setKey(key)(e.target.value)} className={inputCls} data-testid={`content-${key}-input`} />
               )}

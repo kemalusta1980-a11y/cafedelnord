@@ -430,6 +430,7 @@ CONTENT_TEXT_KEYS = {
     "ch1Title", "ch1Body", "ch2Title", "ch2Body", "ch3Title", "ch4Title",
     "contactEyebrow", "contactTitle",
     "footerDesc",
+    "legal_privacy", "legal_kvkk", "legal_cookies",
 }
 CONTENT_IMAGE_KEYS = {"hero_image", "coffee_image", "dessert_image", "about_img_1", "about_img_2", "about_img_3", "about_img_4"}
 

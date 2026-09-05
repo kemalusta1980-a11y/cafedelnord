@@ -58,3 +58,8 @@ www.cafedelnord.com.tr'nin içeriğini (menü, görseller, telefon, slogan) koru
 - TR metin kaydedilince EN/DE/RU/AR çevirileri otomatik AI ile (gpt-5.4, EMERGENT_LLM_KEY) oluşturulur. Ayarlar sekmesindeki tagline/hero_subtitle/about_text/quality_text/vision_text de otomatik çevriliyor.
 - Backend: GET /api/content (public), GET/PUT /api/admin/content, translation_service.py. Sadece değişen metinler çevrilir.
 - iteration_14 testi: backend 9/9, frontend %100 GEÇTİ.
+
+## Yasal Metin Editörü (Haziran 2026)
+- Sayfa İçerikleri sekmesine "Yasal Sayfalar" grubu eklendi: Gizlilik, KVKK, Çerez Politikası metinleri (büyük textarea) TR girilir, 4 dile otomatik çevrilir.
+- LegalPage.js artık content'ten okur; boşsa placeholder uyarısı gösterir. Çerez politikasına temel bir gerçek metin kaydedildi; Gizlilik ve KVKK hâlâ placeholder (işletme sahibi doldurmalı).
+- Curl + screenshot ile doğrulandı (TR/EN gösterim + placeholder korunumu).
