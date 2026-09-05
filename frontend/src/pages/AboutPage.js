@@ -4,14 +4,14 @@ import { useSite } from "../context/SiteContext";
 import { Reveal, GoldTitle } from "../components/Reveal";
 
 const chapters = [
-  { num: "01", titleKey: "ch1Title", tKey: "ch1Body", img: "/images/kahve-atmosfer.jpg" },
-  { num: "02", titleKey: "ch2Title", tKey: "ch2Body", img: "/images/karisik-izgara.jpg" },
-  { num: "03", titleKey: "ch3Title", stKey: "quality_text", img: "/images/serpme.jpg" },
-  { num: "04", titleKey: "ch4Title", tKey: "guestBody", img: "/images/tatli-atmosfer.jpg" },
+  { num: "01", titleKey: "ch1Title", tKey: "ch1Body", imgKey: "about_img_1", img: "/images/kahve-atmosfer.jpg" },
+  { num: "02", titleKey: "ch2Title", tKey: "ch2Body", imgKey: "about_img_2", img: "/images/karisik-izgara.jpg" },
+  { num: "03", titleKey: "ch3Title", stKey: "quality_text", imgKey: "about_img_3", img: "/images/serpme.jpg" },
+  { num: "04", titleKey: "ch4Title", tKey: "guestBody", imgKey: "about_img_4", img: "/images/tatli-atmosfer.jpg" },
 ];
 
 export default function AboutPage() {
-  const { settings, t, st } = useSite();
+  const { settings, t, st, img } = useSite();
   const s = settings || {};
 
   return (
@@ -32,7 +32,7 @@ export default function AboutPage() {
             <Reveal key={ch.num}>
               <div className={`grid grid-cols-1 lg:grid-cols-2 gap-10 items-center ${i % 2 === 1 ? "lg:[direction:rtl]" : ""}`}>
                 <div className="img-frame aspect-[4/3] [direction:ltr]">
-                  <img src={ch.img} alt={t(ch.titleKey)} loading="lazy" />
+                  <img src={img(ch.imgKey, ch.img)} alt={t(ch.titleKey)} loading="lazy" />
                 </div>
                 <div className="[direction:ltr]">
                   <span className="font-serif-editorial italic text-6xl text-white/15 block mb-4">{ch.num}</span>

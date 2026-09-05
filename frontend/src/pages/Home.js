@@ -16,7 +16,7 @@ const manifesto = [
 ];
 
 export default function Home() {
-  const { settings, t, st } = useSite();
+  const { settings, t, st, img } = useSite();
   const [featured, setFeatured] = useState([]);
   const [campaigns, setCampaigns] = useState([]);
   const s = settings || {};
@@ -37,7 +37,7 @@ export default function Home() {
       {/* HERO */}
       <section ref={heroRef} className="relative min-h-screen flex items-end overflow-hidden">
         <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.1 }}>
-          <img src="/images/kumpir.jpg" alt="Cafe Del Nord taş fırında kumpir" className="w-full h-full object-cover" />
+          <img src={img("hero_image", "/images/kumpir.jpg")} alt="Cafe Del Nord taş fırında kumpir" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-[#030303]/60 to-[#030303]/30" />
         </motion.div>
 
@@ -93,7 +93,7 @@ export default function Home() {
       {/* MARQUEE */}
       <div className="py-10 border-y border-white/5 overflow-hidden" data-testid="editorial-marquee">
         <Marquee speed={30} gradient={false} autoFill>
-          <span className="marquee-text mx-8">Kumpir · Burger · Kahve · Künefe · Waffle · Pizza ·</span>
+          <span className="marquee-text mx-8">{t("marqueeText")}</span>
         </Marquee>
       </div>
 
@@ -161,7 +161,7 @@ export default function Home() {
       {/* COFFEE SPLIT */}
       <section className="grid grid-cols-1 lg:grid-cols-2 border-t border-white/5" data-testid="coffee-section">
         <div className="img-frame !rounded-none aspect-[4/3] lg:aspect-auto lg:min-h-[560px]">
-          <img src="/images/kahve-atmosfer.jpg" alt="Taze çekilmiş kahve" loading="lazy" />
+          <img src={img("coffee_image", "/images/kahve-atmosfer.jpg")} alt="Taze çekilmiş kahve" loading="lazy" />
         </div>
         <div className="flex flex-col justify-center px-6 sm:px-14 py-16 lg:py-24">
           <Reveal>
@@ -188,7 +188,7 @@ export default function Home() {
           </Reveal>
         </div>
         <div className="img-frame !rounded-none aspect-[4/3] lg:aspect-auto lg:min-h-[560px] order-1 lg:order-2">
-          <img src="/images/tatli-atmosfer.jpg" alt="Tatlı çeşitleri" loading="lazy" />
+          <img src={img("dessert_image", "/images/tatli-atmosfer.jpg")} alt="Tatlı çeşitleri" loading="lazy" />
         </div>
       </section>
 

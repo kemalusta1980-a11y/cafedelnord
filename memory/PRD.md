@@ -52,3 +52,9 @@ www.cafedelnord.com.tr'nin içeriğini (menü, görseller, telefon, slogan) koru
 - iteration_13 testing_agent regresyonu: 11 ziyaretçi akışı (ana sayfa, menü 33 ürün/4 kategori, galeri 16 foto, iletişim, hakkımızda, 5 dil + AR RTL, WhatsApp FAB, mobil 390px, rezervasyon gizli, cookie consent, console hataları) %100 GEÇTİ. Runtime hatası yok.
 - Kozmetik düzeltme: MenuItemCard.js'deki geçersiz `font-800` sınıfı kaldırıldı.
 - Bekleyen: Kullanıcının bir sonraki tasarım/özellik talebi. Fiyat/sepet/e-ticaret yasağı sürüyor. Rezervasyon kapalı kalmalı.
+
+## Sayfa İçerikleri Editörü (Haziran 2026)
+- Admin panele "Sayfa İçerikleri" sekmesi eklendi: tüm sayfa metinleri (TR) ve görselleri (hero, kahve/tatlı bölümü, hakkımızda 4 görsel) düzenlenebilir.
+- TR metin kaydedilince EN/DE/RU/AR çevirileri otomatik AI ile (gpt-5.4, EMERGENT_LLM_KEY) oluşturulur. Ayarlar sekmesindeki tagline/hero_subtitle/about_text/quality_text/vision_text de otomatik çevriliyor.
+- Backend: GET /api/content (public), GET/PUT /api/admin/content, translation_service.py. Sadece değişen metinler çevrilir.
+- iteration_14 testi: backend 9/9, frontend %100 GEÇTİ.

@@ -1,0 +1,41 @@
+{
+  "summary": "Iteration 14: Backend + frontend testing of new Admin Page Content editor + auto-translation feature. All 9 pytest tests PASSED (public GET /api/content, 401 on unauth PUT, LLM translation to en/de/ru/ar, idempotent re-save (fast <5s = no LLM call), whitelist ignores invalid keys, settings tagline translation). Frontend admin UI (/admin → Sayfa İçerikleri) fully functional: 6 groups render, TR i18n defaults pre-fill empty fields (heroLine1='EFSANE LEZZET', menuTitle='Menümüz', etc.), Kaydet ve Çevir triggers toast 'Görsel yüklendi/Kaydedildi', file upload returns /api/files/... URL and preview updates. Visitor site correctly shows admin override in TR + auto-translated en value after language switch, and hero_image override renders /images/kumpir.jpg on home. Test data cleaned up.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {"ui_bugs": [], "integration_issues": [], "design_issues": []},
+  "verified_flows": {
+    "GET /api/content public": "200 without auth; returns page_content doc",
+    "PUT /api/admin/content no-auth": "401",
+    "PUT /api/admin/content admin": "200, translated:true, response.content has dessertTitle_en/de/ru/ar populated by LLM (verified: 'Test Enfes Tatlılar' → 'Test Irresistible Desserts')",
+    "Idempotent re-save": "Same payload re-sent completes in <5s → LLM not re-invoked",
+    "Whitelist": "Invalid keys (nonExistentKey_xyz) silently dropped, not persisted",
+    "PUT /api/admin/settings tagline": "translated:true; tagline_en/de/ru/ar persisted in settings doc",
+    "Visitor TR": "dessertTitle override shows on home",
+    "Visitor EN": "dessertTitle_en auto-translation shows after lang switch",
+    "Visitor hero_image": "/images/kumpir.jpg override renders on home hero",
+    "Admin UI /admin": "Session cookie via context.add_cookies works; dashboard loads",
+    "Admin tab admin-tab-content": "Renders 6 groups (Ana Sayfa, Menü, Hakkımızda, Galeri, İletişim, Footer)",
+    "TR i18n defaults": "Empty content keys pre-filled with UI.tr[key] (heroLine1, menuTitle, etc.)",
+    "Save & translate": "content-save-btn shows 'Kaydet ve Çevir', triggers success toast",
+    "Image upload": "7 file inputs present; upload returns /api/files/cafedelnord/uploads/<uuid>.png, populates text input and updates preview"
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_content_admin.py",
+    "/app/test_reports/pytest/iter14_content.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py update_content: image key values not stripped when empty — allows persisting empty-string hero_image which is fine for reset (currently used for cleanup). OK.",
+    "Prior notes still stand (non-blocking): Home.js uses lowercase fetchpriority (React warning), MenuItemCard.js has invalid tailwind font-800.",
+    "Consider server.py: TRANSLATABLE_SETTINGS logic strips before compare — but writes non-stripped values into allowed via update; minor inconsistency but harmless.",
+    "AdminContent.js save() sends UI.tr defaults for empty fields, meaning every field is always translated on first save (not just user-edited). Acceptable for MVP but wastes LLM tokens; consider only sending non-empty user-edited fields."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_content_admin.py (new)"
+  ],
+  "success_rate": {"backend": "100% (9/9)", "frontend": "100%"},
+  "test_credentials": "Created MongoDB admin session: user_id=test-admin-content-1788642803623, session_token=test_session_content_1788642803623 (expires +7d)",
+  "seed_data_creation": "Admin user + session inserted directly in Mongo per /app/auth_testing.md",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Feature is stable. Admin content editor works end-to-end with auto-translation via Emergent LLM (gpt-5.4). Test session token still valid for 7 days for re-testing. Uses data-testid: admin-tab-content, admin-content-tab, content-group-<Title>, content-<key>-input, content-save-btn. Backend test file at /app/backend/tests/test_content_admin.py takes ~7s (leverages cached translation on repeat runs)."
+}

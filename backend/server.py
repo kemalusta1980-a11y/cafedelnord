@@ -31,6 +31,7 @@ AUTH_API = "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data
 
 from email_service import send_email  # noqa: E402
 from storage_service import init_storage, put_object, get_object, APP_NAME  # noqa: E402
+from translation_service import translate_fields  # noqa: E402
 
 
 # ---------- Models ----------
@@ -392,12 +393,83 @@ async def admin_settings_get(user=Depends(require_admin)):
     return {**Settings().model_dump(), **(doc or {})}
 
 
+TRANSLATABLE_SETTINGS = ["tagline", "hero_subtitle", "about_text", "quality_text", "vision_text"]
+
+
 @api_router.put("/admin/settings")
 async def update_settings(body: dict, user=Depends(require_admin)):
     allowed_keys = set(Settings.model_fields.keys()) - {"id"}
     allowed = {k: v for k, v in body.items() if k in allowed_keys}
+    existing = await db.settings.find_one({"id": "site"}, {"_id": 0}) or {}
+    changed = {
+        k: allowed[k].strip()
+        for k in TRANSLATABLE_SETTINGS
+        if isinstance(allowed.get(k), str) and allowed[k].strip() and allowed[k].strip() != (existing.get(k) or "").strip()
+    }
+    translated = True
+    if changed:
+        try:
+            allowed.update(await translate_fields(changed))
+        except Exception as e:
+            logger.error(f"Settings translation failed: {e}")
+            translated = False
     await db.settings.update_one({"id": "site"}, {"$set": allowed}, upsert=True)
-    return {"ok": True}
+    return {"ok": True, "translated": translated}
+
+
+# ---------- Page content (admin editable texts & images) ----------
+CONTENT_TEXT_KEYS = {
+    "heroLine1", "heroLine2", "marqueeText", "featuredTitle",
+    "m1Title", "m2Title", "m3Title", "guestBody",
+    "coffeeEyebrow", "coffeeTitle", "coffeeBody",
+    "dessertEyebrow", "dessertTitle", "dessertBody",
+    "igTitle", "igBody",
+    "menuTitle", "menuSubtitle",
+    "galleryEyebrow", "galleryTitle",
+    "aboutEyebrow", "aboutTitle",
+    "ch1Title", "ch1Body", "ch2Title", "ch2Body", "ch3Title", "ch4Title",
+    "contactEyebrow", "contactTitle",
+    "footerDesc",
+}
+CONTENT_IMAGE_KEYS = {"hero_image", "coffee_image", "dessert_image", "about_img_1", "about_img_2", "about_img_3", "about_img_4"}
+
+
+@api_router.get("/content")
+async def get_content():
+    return await db.page_content.find_one({"id": "content"}, {"_id": 0}) or {"id": "content"}
+
+
+@api_router.get("/admin/content")
+async def admin_get_content(user=Depends(require_admin)):
+    return await db.page_content.find_one({"id": "content"}, {"_id": 0}) or {"id": "content"}
+
+
+@api_router.put("/admin/content")
+async def update_content(body: dict, user=Depends(require_admin)):
+    existing = await db.page_content.find_one({"id": "content"}, {"_id": 0}) or {}
+    updates = {}
+    changed_texts = {}
+    for k, v in body.items():
+        if not isinstance(v, str):
+            continue
+        if k in CONTENT_IMAGE_KEYS:
+            updates[k] = v.strip()
+        elif k in CONTENT_TEXT_KEYS:
+            v = v.strip()
+            updates[k] = v
+            if v and v != (existing.get(k) or "").strip():
+                changed_texts[k] = v
+    translated = True
+    if changed_texts:
+        try:
+            updates.update(await translate_fields(changed_texts))
+        except Exception as e:
+            logger.error(f"Content translation failed: {e}")
+            translated = False
+    if updates:
+        await db.page_content.update_one({"id": "content"}, {"$set": updates}, upsert=True)
+    doc = await db.page_content.find_one({"id": "content"}, {"_id": 0}) or {"id": "content"}
+    return {"content": doc, "translated": translated}
 
 
 @api_router.get("/admin/reservations")
